@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
+    <title>Solo Aalpine Trek</title>
+    <style>
+        .navbar-brand{
+          font-weight: 500;
+          color: #009970;
+          font-size: 24px;
+          transition: 0.3s color;
+        }
+        .navbar-toggler {
+          border: none;
+          font-size: 1.25rem;
+        }
+        .nav-link{
+          font-weight: 600;
+          font-size: 18px;
+          transition: color 0.3s ease;
+        }
+
+    </style>
+  </head>
+  <body>
+<header>
+      {% comment %} <img class="logo"  src="{% static 'img/logo.png'%}" alt="logo_Simg">  {% endcomment %}
+      <!--Navbar-->
+      <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+          <a class="navbar-brand  me-auto" href="#">Logo</a>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Logo</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                  <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                    <li class="nav-item">
+                      <a class="nav-link mx-lg-2 active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link mx-lg-2" href="#">About</a>
+                    </li>      
+                    <li class="nav-item">
+                      <a class="nav-link mx-lg-2" href="#">Services</a>
+                    </li> 
+                    <li class="nav-item">
+                      <a class="nav-link mx-lg-2" href="#">Contact us</a>
+                    </li> 
+                    <li class="nav-item">
+                      <a class="nav-link mx-lg-2" href="#">Destination</a>
+                    </li>          
+                  </ul>
+                </div>
+          </div>
+          <a href="#" class="login-button">Login</a>
+          <button class="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </nav>
+      <!--End-->
+</header> 
+    {% comment %} <img src="{% static 'img/img11.jpg' %}" class="img-fluid" alt="My Image"> {% endcomment %}
+    <!--Hero section-->
+    <section class="hero-section">
+      <div class="container d-flex justify-content-center align-items-center fs-1 test-white flex-Column ">
+        <h1>SOLO ALPINE TREK</h1>
+      </div>
+    </section>
+    <!--End Hero section-->
+    <section class="banner">
+      <div class="container">
+        <div id="overlay"></div>
+          <h1 class="head1">SOLO ALPINE TREK</h1>
+          <p style="margin-bottom: 350px;">
+            "Solo Alpine Trek and Expedition" is your go-to trek and tour operator in Kathmandu, Nepal. 
+            Led by Chairman Mr. Shree Dhan Rai and a dedicated team, we offer top-notch tourism services 
+            at fair prices. With a focus on safety, environmental concerns, and guest satisfaction, we ensure
+            hassle-free holidays, treks, and expeditions. From trekking and mountaineering to rafting trips and 
+            cultural tours, we've got you covered. Contact us for transparent pricing and personalized service, 
+            backed by our recognition from the Government of Nepal.
+          </p>
+      </div>
+      {% comment %} <div class="card-info">
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+          </div>
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+          </div>
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+          </div>
+      </div> {% endcomment %}
+    </section>
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h3>Company</h3>
+            <ul>
+              <li>About Us</li>
+              <li>Our Services</li>
+              <li>Privacy Policy</li>
+              <li>Affiliate Program</li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h3>Support</h3>
+            <ul>
+              <li>Contact Us</li>
+              <li>FAQ</li>
+              <li>Press</li>
+              <li>Blog</li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h3>Community</h3>
+            <ul>
+              <li>Events</li>
+              <li>Forums</li>
+              <li>Meetups</li>
+              <li>Workshops</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!--End Foter -->
+    <scriptsrc="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+  </body>
+</html>

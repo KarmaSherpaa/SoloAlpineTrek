@@ -37,14 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-]
-EXTERNAL_APPS = [
     'accounts',
     'home'
 ]
+    
 
-INSTALLED_APPS += EXTERNAL_APPS
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -79,14 +77,6 @@ WSGI_APPLICATION = 'SoloAlpineTrek.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -104,7 +94,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+DATABASES={
+    'default':{
+        'ENGINE':'django.db.backends.mysql',
+        'NAME':'SoloAlpineTrek',
+        'HOST':'127.0.0.1',
+        'PORT':'3306',
+        'USER':'root',
+        'PASSWORD':'karma123@sh#',   
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -129,7 +128,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #Added Manually
-
+import os
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    os.path.join(BASE_DIR, 'static'),
 ]
+
+AUTH_USER_MODEL = 'accounts.User'

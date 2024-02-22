@@ -4,7 +4,6 @@ from . import views  # Import the missing module
 import django.views.static  # Import the missing module
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('<path:path>', django.views.static.serve),
+    path("Signin", views.signin, name="signin"),
+    path("Signup", views.signup, name="signup")
 ]
