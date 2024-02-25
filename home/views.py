@@ -20,6 +20,6 @@ def home(request):
 # def services(request):
 #     return HttpResponse("This is Services page")
 
-# def destination(request):
-#     return HttpResponse("This is destination page")
+def destination(request):
+    return render(request, "destination.html")
 
