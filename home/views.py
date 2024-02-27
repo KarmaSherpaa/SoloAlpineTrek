@@ -1,25 +1,17 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+from .models import Destination
 # Create your views here.
 
 def home(request):
-    return render(request, "index.html")
+    destinations = Destination.objects.all()
+    context = {
+        'destinations': destinations
+    }
+    return render(request, "index.html", context)
 
-# def about(request):
-#     return HttpResponse("This is about page")
-
-# def contact(request):
-#     return HttpResponse("This is contact page")
-
-# def blog(request):
-#     return HttpResponse("This is Blog page")
-
-# def gallery(request):
-#     return HttpResponse("This is Gallery page")
-
-# def services(request):
-#     return HttpResponse("This is Services page")
-
-def destination(request):
-    return render(request, "destination.html")
-
+def destination_detail(request, destination_id=None):
+    destination = get_object_or_404(Destination, pk=destination_id)
+    context = {
+        'destination': destination
+    }
+    return render(request, "destination.html", context)
