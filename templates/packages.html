@@ -25,13 +25,8 @@
         }
         
         .hero-sections {
-            {% if first_image_url %}
-                background: url('{{ first_image_url }}') no-repeat center;
-                background-size: cover;
-            {% else %}
-                /* Fallback background if no image is available */
-                background: #ccc; /* Change the color as needed */
-            {% endif %}
+            background: url('{{ package.image.url }}')   no-repeat center;
+            background-size: cover;
             width: 100%;
             height: 100vh;
         }
@@ -74,30 +69,20 @@
     <!--End Hero section-->
     <section class=" bg-white p-5">
       <div class="container py-5">
-          <h2 class="text-center text-dark ">{{destination.name}}</h2>
-          <p class="lead text-center text-dark mb-5">{{destination.description}}</p>
+          <h2 class="text-center text-dark ">{{package.name}}</h2>
+          <p class="lead text-center text-dark mb-5">{{package.description}}</p>
+          <p class="card-text"><strong>Duration:</strong> {{ package.duration }}</p>
+            <p class="card-text"><strong>Difficulty Level:</strong> {{ package.difficulty_level }}</p>
+            <p class="card-text"><strong>Price:</strong> ${{ package.price }}</p>
+            {% if package.booking_available %}
+            <p class="card-text text-success">Booking Available</p>
+            <a href="#" class="btn btn-primary">Book Now</a>
+            {% else %}
+            <p class="card-text text-danger">Booking Not Available</p>
+            {% endif %}
+          
       </div>
-    </section>
-    <section class=" primary-subtle p-5">
-      <h2 class="text-center text-black">Packages</h2>
-      <br>
-      <br>
-      <div class="container ">
-          <div class="row g-4 ">
-          {% for activity in activities %}
-            <div class="col-lg-4">
-              <div class="card  bg-light">
-                <img src="{{ activity.image.url }}" class="card-img-top" alt="...">
-                <div class="card-body text-center p-5">
-                  <h5 class="card-title">{{ activity.title }}</h5>
-                  <p class="card-text">{{ activity.description|truncatechars:100 }}</p>
-                  <a href="{% url 'activity_detail' activity.id %}" class="btn btn-primary">Read more</a>
-                </div>
-              </div> 
-            </div> 
-          {% endfor %}
-          </div>  
-      </div>
+
     </section>
     <section class=" primary-subtle p-5">
       <h2 class="text-center text-black">We are Associated with</h2>

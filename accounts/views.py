@@ -1,7 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from .models import User  # Import your custom User model from your models.py file
+from .models import User 
+from home.models import Destination
 from django.contrib.auth import authenticate, login
 
 # check if string is email
@@ -11,6 +12,7 @@ def is_email(string):
     return False
 
 def signup(request):
+    destinations = Destination.objects.all()
     if request.method == 'POST':
         username = request.POST.get('username')  # Retrieve username from form
         full_name = request.POST.get('full_name')
@@ -20,7 +22,6 @@ def signup(request):
         dob = request.POST.get('dob')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
-        
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists')
             context = {
@@ -42,10 +43,11 @@ def signup(request):
             messages.success(request, 'Registration Successful')
             return redirect('/Signin')
   
-    return render(request, 'Signup.html')
+    return render(request, 'Signup.html' , {'destinations': destinations})
 
 
 def signin(request):
+    destinations = Destination.objects.all()
     if request.method == 'POST':
         username_or_email = request.POST.get('username_or_email')
         password = request.POST.get('password')
@@ -61,6 +63,6 @@ def signin(request):
         else:
             messages.error(request, 'Invalid Username or Email')
 
-    return render(request, 'Signin.html')
+    return render(request, 'Signin.html', {'destinations': destinations})
 
 

@@ -25,13 +25,8 @@
         }
         
         .hero-sections {
-            {% if first_image_url %}
-                background: url('{{ first_image_url }}') no-repeat center;
-                background-size: cover;
-            {% else %}
-                /* Fallback background if no image is available */
-                background: #ccc; /* Change the color as needed */
-            {% endif %}
+            background: url('{{ activity.image.url }}') no-repeat center;
+            background-size: cover;
             width: 100%;
             height: 100vh;
         }
@@ -74,8 +69,8 @@
     <!--End Hero section-->
     <section class=" bg-white p-5">
       <div class="container py-5">
-          <h2 class="text-center text-dark ">{{destination.name}}</h2>
-          <p class="lead text-center text-dark mb-5">{{destination.description}}</p>
+          <h2 class="text-center text-dark ">{{ activity.title }}</h2>
+          <p class="lead text-center text-dark mb-5">{{activity.description}}</p>
       </div>
     </section>
     <section class=" primary-subtle p-5">
@@ -84,14 +79,14 @@
       <br>
       <div class="container ">
           <div class="row g-4 ">
-          {% for activity in activities %}
+            {% for package in packages %}
             <div class="col-lg-4">
               <div class="card  bg-light">
-                <img src="{{ activity.image.url }}" class="card-img-top" alt="...">
+                <img src="{{ package.image.url }}" class="card-img-top" alt="...">
                 <div class="card-body text-center p-5">
-                  <h5 class="card-title">{{ activity.title }}</h5>
-                  <p class="card-text">{{ activity.description|truncatechars:100 }}</p>
-                  <a href="{% url 'activity_detail' activity.id %}" class="btn btn-primary">Read more</a>
+                  <h5 class="card-title">{{ package.name }}</h5>
+                  <p class="card-text">{{ package.description|truncatechars:100 }}</p>
+                  <a href="{% url 'package_detail' package.id %}" class="btn btn-primary">Read more</a>
                 </div>
               </div> 
             </div> 
