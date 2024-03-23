@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 # check if string is email
 def is_email(string):
     if '@' in string:
-        return True
+        return True 
     return False
 
 def signup(request):
@@ -56,7 +56,9 @@ def signin(request):
         user = User.objects.filter(Q(username=username_or_email) | Q(email=username_or_email)).first()
 
         if user is not None:
-            if user.check_password(password):
+            authenticated_user = authenticate(username=user.username, password=password)
+            if authenticated_user is not None:
+                login(request, authenticated_user)
                 return redirect('/')
             else:
                 messages.error(request, 'Invalid Password')
@@ -64,5 +66,3 @@ def signin(request):
             messages.error(request, 'Invalid Username or Email')
 
     return render(request, 'Signin.html', {'destinations': destinations})
-
-

@@ -4,10 +4,18 @@ from .models import Destination , Activity , Package
 
 def home(request):
     destinations = Destination.objects.all()
+    
+    # Get the currently logged-in user's name if available
+    user_name = None
+    if request.user.is_authenticated:
+        user_name = request.user.username
+
     context = {
-        'destinations': destinations
+        'destinations': destinations,
+        'user_name': user_name  # Include the user's name in the context
     }
     return render(request, "index.html", context)
+
 
 def destination_detail(request, destination_id=None):
     destination = get_object_or_404(Destination, pk=destination_id)

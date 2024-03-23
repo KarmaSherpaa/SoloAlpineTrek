@@ -118,7 +118,7 @@
             <input type="text" type="text" name="username_or_email" id="username-input-field" placeholder="Username/Email" value="{% if username_or_email %}{{ username_or_email }}{% endif %}">
 
             <div class="password-field">
-                <input name="password" id="password-input-field" placeholder="Password" value="{% if password %}{{ password }}{% endif %}" >
+                <input name="password" id="password-input-field" type="password" placeholder="Password" value="{% if password %}{{ password }}{% endif %}" >
                 <span class="show-password" id="show-password" onclick="togglePasswordVisibility()">Show</span>
             </div>
 
