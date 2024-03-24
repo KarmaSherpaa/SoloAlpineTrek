@@ -75,8 +75,14 @@
             <p class="card-text"><strong>Difficulty Level:</strong> {{ package.difficulty_level }}</p>
             <p class="card-text"><strong>Price:</strong> ${{ package.price }}</p>
             {% if package.booking_available %}
-            <p class="card-text text-success">Booking Available</p>
-            <a href="#" class="btn btn-primary">Book Now</a>
+            <form method="post" action="{% url 'book_activity' package.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Book Now</button>
+            </form>
             {% else %}
             <p class="card-text text-danger">Booking Not Available</p>
             {% endif %}

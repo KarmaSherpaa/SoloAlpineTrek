@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Destination, Image, Activity, Package
+from .models import Destination, Image, Activity, Package, Booking
 # Register your models here.
 
 class ImageInline(admin.TabularInline):  # Inline for adding images
@@ -14,3 +14,4 @@ admin.site.register(Image)
 
 admin.site.register(Activity)
 admin.site.register(Package)
+admin.site.register(Booking)

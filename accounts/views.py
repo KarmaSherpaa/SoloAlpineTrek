@@ -66,3 +66,8 @@ def signin(request):
             messages.error(request, 'Invalid Username or Email')
 
     return render(request, 'Signin.html', {'destinations': destinations})
+
+def signout(request):
+    from django.contrib.auth import logout
+    logout(request)
+    return redirect('/')
