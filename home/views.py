@@ -53,11 +53,11 @@ def book_activity(request, package_id):
         # activity= get_object_or_404(Activity, pk=activity_id)
         date = request.POST.get('date')
         # activity_id = request.POST.get('activity_id')  # Assuming activity_id is passed through the form
-        if date:
-  # Retrieve the activity associated with the package
+        participants = request.POST.get('participants')
+        special_requirements = request.POST.get('special_requirements')
+        if date  and participants:
             activity = package.activities
 
-# Now that activity is defined, you can access its destination
             destination = activity.destination
 
             # Create a new booking record
@@ -66,12 +66,14 @@ def book_activity(request, package_id):
                 activity=activity,
                 package=package,
                 destination=destination,
-                date_booked=date
+                date_booked=date,
+                participants=participants,
+                special_requirements=special_requirements
             )
             messages.success(request, 'Booking successful!')
             return redirect('package_detail', package_id=package_id)
         else:
-            messages.error(request, 'Please select a valid date and activity.')
+            messages.error(request, 'Please select a valid date and  specify the number of participants.')
             return redirect('package_detail', package_id=package_id)
     else:
         # If the request method is not POST, redirect to the package detail page

@@ -1,7 +1,8 @@
 from django.db import models
 from accounts.models import User
 from django.db import models
-
+from django.core.validators import MinValueValidator
+from django.utils import timezone
 
 class Destination(models.Model):
     name = models.CharField(max_length=100)
@@ -45,6 +46,9 @@ class Booking(models.Model):
     package = models.ForeignKey(Package, on_delete=models.CASCADE)  
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE) 
     date_booked = models.DateField(auto_now_add=True)
+    date = models.DateField(default=timezone.now)
+    participants = models.IntegerField(default=1, validators=[MinValueValidator(1)])  # Field for the number of participants
+    special_requirements = models.TextField(blank=True, null=True)  # Field for special requirements
 
     def __str__(self):
         return f"{self.activity.title} - {self.user.username}"
