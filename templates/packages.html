@@ -78,34 +78,31 @@
         <form method="post" action="{% url 'book_activity' package.id %}">
           {% csrf_token %}
           <div class="form-group">
-            <!-- Date -->
-            <label for="date" class="form-label">Date:</label>
-            <input type="date" id="date" name="date" class="form-control" required>
-            
-            <!-- Number of Participants -->
-            <label for="participants" class="form-label">Number of Participants:</label>
-            <input type="number" id="participants" name="participants" min="1" class="form-control" required>
-            
-            <!-- Special Requirements -->
-            <label for="special_requirements" class="form-label">Special Requirements (if any):</label>
-            <textarea id="special_requirements" name="special_requirements" rows="4" cols="50" class="form-control"></textarea>
-            <p>uuid: {{ uuid_val }}</p>
-          </div>
-          <button type="submit" class="btn btn-primary">Book Now</button>
+              <!-- Date -->
+              <label for="date" class="form-label">Date:</label>
+              <input type="date" id="date" name="date" class="form-control" required>
+              
+              <!-- Number of Participants -->
+              <label for="participants" class="form-label">Number of Participants:</label>
+              <input type="number" id="participants" name="participants" min="1" class="form-control" required>
+              
+              <!-- Special Requirements -->
+              <label for="special_requirements" class="form-label">Special Requirements (if any):</label>
+              <textarea id="special_requirements" name="special_requirements" rows="4" cols="50" class="form-control"></textarea>
+              <button type="submit" class="btn btn-primary">Book Now</button>
         </form>
-        {% else %}
+            <form action="{% url 'initkhalti' %}" method="POST">
+              {%csrf_token%}
+              <input type="hidden" name="purchase_order_id" value="{{ uuid_val }}"  id="pid">
+              <input type="hidden" name="amount" value="10000" id="amt">
+              <input type="submit" class="btn btn-primary" value="Pay With Khalti" name="" id="">
+              <input type="hidden" name="return_url" value="http://127.0.0.1:8000/return_url">
+            </form>
+            {% else %}
             <p class="card-text text-danger">Booking Not Available</p>
             {% endif %}
-
+        </div>
       </div>
-      <form action="{% url 'initkhalti' %}" method="POST">
-        {%csrf_token%}
-        <input type="hidden" name="purchase_order_id" value="{{ uuid_val }}"  id="pid">
-        <input type="hidden" name="amount" value="10000" id="amt">
-        <input type="submit" value="Pay With Khalti" name="" id="">
-        <input type="hidden" name="return_url" value="http://127.0.0.1:8000/return_url">
-    </form>
-
     </section>
     <section class=" primary-subtle p-5">
       <h2 class="text-center text-black">Popular Packages</h2>

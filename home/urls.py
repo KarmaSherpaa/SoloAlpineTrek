@@ -11,5 +11,4 @@ urlpatterns = [
     path('initkhalti', views.initkhalti, name='initkhalti'),
     path('return_url', views.return_url, name='return_url'),
     path('generate_uuid', views.generate_uuid, name='generate_uuid'),
-    
 ]

@@ -47,21 +47,11 @@ def package_detail(request, package_id):
     uuid_val = uuid.uuid4()
     return render(request, 'packages.html', {'package': package, 'destinations': destinations, 'uuid_val': uuid_val, })
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.shortcuts import get_object_or_404
-from .models import Booking, Activity, Package, Destination
 
 def book_activity(request, package_id):
-
-    print("yoyo")
-
     uuid_val = uuid.uuid4()
-    print(uuid_val)
-
     if request.method == 'POST':
         package = get_object_or_404(Package, pk=package_id)
-        print("yyoyo")
         # activity= get_object_or_404(Activity, pk=activity_id)
         date = request.POST.get('date')
         # activity_id = request.POST.get('activity_id')  # Assuming activity_id is passed through the form
@@ -83,7 +73,6 @@ def book_activity(request, package_id):
                 special_requirements=special_requirements
             )
             messages.success(request, 'Booking successful!')
-            print("I m" ,uuid_val)
             return redirect('package_detail', package_id=package_id)
         else:
             messages.error(request, 'Please select a valid date and  specify the number of participants.')
@@ -91,7 +80,6 @@ def book_activity(request, package_id):
 
 def generate_uuid(request):
     uuid_val = uuid.uuid4()
-    print(uuid_val)
     context = {
         'uuid_val': uuid_val,
     }
