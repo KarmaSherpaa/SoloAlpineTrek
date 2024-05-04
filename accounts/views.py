@@ -1,9 +1,15 @@
 from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from .models import User 
+from .models import User
 from home.models import Destination
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from datetime import datetime
+from django.core.exceptions import ValidationError
+from .forms import  ProfileImageForm
+from .models import UserProfile
+
 
 # check if string is email
 def is_email(string):
@@ -40,6 +46,7 @@ def signup(request):
             user = User.objects.create_user(username=username, full_name=full_name, dob=dob, email=email, address=address, contact=contact)
             user.set_password(password)
             user.save()
+            UserProfile.objects.create(user=user)
             messages.success(request, 'Registration Successful')
             return redirect('/Signin')
   
@@ -72,5 +79,69 @@ def signout(request):
     logout(request)
     return redirect('/')
 
+@login_required
 def profile(request):
-    return render(request, 'profile.html')
+    user = request.user
+    context = {
+        "username": user.username,
+        "full_name": user.full_name,
+        "email": user.email,
+        "dob": user.dob,
+        "address": user.address,
+        "contact": user.contact,
+    }
+    return render(request, 'users-profile.html', context=context)
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        contact = request.POST.get('contact')
+        address = request.POST.get('address')
+        dob_str = request.POST.get('dob')
+        
+        try:
+            dob = datetime.strptime(dob_str, '%B %d, %Y').date()
+            if dob > datetime.now().date():
+                raise ValidationError('Invalid Date of Birth')
+                
+            user.username = username
+            user.full_name = full_name
+            user.email = email
+            user.contact = contact
+            user.address = address
+            user.dob = dob
+            user.save()
+            
+            messages.success(request, 'Profile updated successfully')
+            return redirect('/Profile')
+        
+        except ValueError:
+            messages.error(request, 'Invalid Date Format')
+        
+        except ValidationError as e:
+            messages.error(request, str(e))
+    
+    return render(request, 'users-profile.html', {
+        "username": user.username,
+        "full_name": user.full_name,
+        "email": user.email,
+        "dob": user.dob,
+        "address": user.address,
+        "contact": user.contact,
+    })
+
+
+@login_required
+def change_profile_pic(request):
+    if request.method == "POST":
+        user_profile = request.user.userprofile
+        form = ProfileImageForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            user_profile.save()
+            messages.success(request, 'Profile picture changed successfully.')
+    return redirect('profile')

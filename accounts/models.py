@@ -23,3 +23,15 @@ class User(AbstractUser):
     is_customer = models.BooleanField(default=True)
     def __str__(self):
         return self.username
+    @property
+    def get_profile_image(self):
+        if self.userprofile.profile_image:
+            return self.userprofile.profile_image.url
+        return None
+    
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_image = models.ImageField(upload_to='profile_images', blank=True, null=True)
+
+    def __str__(self):
+         return f'{self.id}'
