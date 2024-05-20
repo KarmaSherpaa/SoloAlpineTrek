@@ -2,13 +2,13 @@
     {% if messages %}
         {% for message in messages %}
             {% if message.tags == 'error' %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: rgba(0, 0, 0, 0.1); color: green;">
             {% else %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="background-color: rgba(0, 0, 0, 0.1); color: green;">
             {% endif %}
 
                 {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="close btn btn-secondary" data-dismiss="alert" aria-label="Close" style="background-color: transparent;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

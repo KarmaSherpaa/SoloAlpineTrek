@@ -9,6 +9,7 @@ urlpatterns = [
     path('package/<int:package_id>', views.package_detail, name='package_detail'),
     path('book_activity/<int:package_id>/', views.book_activity, name='book_activity'),
     path('initkhalti', views.initkhalti, name='initkhalti'),
-    path('return_url', views.return_url, name='return_url'),
+    path('return_url/<int:package_id>/', views.return_url, name='return_url'),
     path('generate_uuid', views.generate_uuid, name='generate_uuid'),
+
 ]

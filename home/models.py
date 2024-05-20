@@ -45,12 +45,18 @@ class Booking(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     package = models.ForeignKey(Package, on_delete=models.CASCADE)  
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE) 
-    date_booked = models.DateField(auto_now_add=True)
-    date = models.DateField(default=timezone.now)
-    participants = models.IntegerField(default=1, validators=[MinValueValidator(1)])  # Field for the number of participants
+    date_booked = models.DateField(auto_now_add=True,null=True,blank=True)
+    date = models.DateField(default=timezone.now,null=True,blank=True),  # Field for the date of the booking
+    participants = models.IntegerField(default=1, validators=[MinValueValidator(1)],null=True,blank=True)  # Field for the number of participants
     special_requirements = models.TextField(blank=True, null=True)  # Field for special requirements
+    payment_gateway = models.BooleanField(default=False)  # Field to indicate if booking is through payment gateway
+    pidx =models.CharField(max_length=50,null=True,blank=True)
+    status=models.CharField(max_length=50,null=True,blank=True)
+    transection_id=models.CharField(max_length=50,null=True,blank=True)
+    fee=models.DecimalField(max_digits=10, decimal_places=2,null=True,blank=True)
+    refunded=models.BooleanField(null=True,blank=True,default=False)
+    price=models.IntegerField( null=True,blank=True)
 
     def __str__(self):
         return f"{self.activity.title} - {self.user.username}"
   
-

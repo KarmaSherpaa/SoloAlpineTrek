@@ -47,9 +47,33 @@
           
         }
       
-        .hero-sections h1 {
-            font-size: 1.5em;
+        .hero-section h1 {
+          font-size: 1.5em;
+          position: relative;
+          color: #fff;
         }
+        .messages li {
+          padding: 10px;
+          border-radius: 5px;
+          margin-bottom: 10px;
+        }
+        .messages li.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .messages li.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .messages li.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .messages li.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+      
 
     </style>
   </head>
@@ -63,48 +87,63 @@
     <!--Hero section-->
     <section class="hero-sections slide slideshow ">
       <div class="container d-flex justify-content-center align-items-center fs-1 test-white flex-Column ">
-        <h1>SOLO ALPINE TREK</h1>
+        <h1 style="color:#ffffff; font-size: 2em;">SOLO ALPINE TREK</h1>
       </div>
     </section>
     <!--End Hero section-->
-    <section class=" bg-white p-5">
-      <div class="container py-5">
-        <h2 class="text-center text-dark ">{{package.name}}</h2>
-        <p class="lead text-center text-dark mb-5">{{package.description}}</p>
-        <p class="card-text"><strong>Duration:</strong> {{ package.duration }}</p>
-        <p class="card-text"><strong>Difficulty Level:</strong> {{ package.difficulty_level }}</p>
-        <p class="card-text"><strong>Price:</strong> ${{ package.price }}</p>
-        {% if package.booking_available %}
-        <form method="post" action="{% url 'book_activity' package.id %}">
-          {% csrf_token %}
-          <div class="form-group">
-              <!-- Date -->
-              <label for="date" class="form-label">Date:</label>
-              <input type="date" id="date" name="date" class="form-control" required>
-              
-              <!-- Number of Participants -->
-              <label for="participants" class="form-label">Number of Participants:</label>
-              <input type="number" id="participants" name="participants" min="1" class="form-control" required>
-              
-              <!-- Special Requirements -->
-              <label for="special_requirements" class="form-label">Special Requirements (if any):</label>
-              <textarea id="special_requirements" name="special_requirements" rows="4" cols="50" class="form-control"></textarea>
-              <button type="submit" class="btn btn-primary">Book Now</button>
-        </form>
-            <form action="{% url 'initkhalti' %}" method="POST">
-              {%csrf_token%}
-              <input type="hidden" name="purchase_order_id" value="{{ uuid_val }}"  id="pid">
-              <input type="hidden" name="amount" value="10000" id="amt">
-              <input type="submit" class="btn btn-primary" value="Pay With Khalti" name="" id="">
-              <input type="hidden" name="return_url" value="http://127.0.0.1:8000/return_url">
-            </form>
-            {% else %}
-            <p class="card-text text-danger">Booking Not Available</p>
-            {% endif %}
-        </div>
+  </section>
+  <!--End Hero section-->
+      
+  <section class="bg-light p-5">
+    <div class="container py-5">
+        {% if messages %}
+          <ul class="messages">
+              {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+          </ul>
+        {% endif %}
+        <h2 class="text-center text-dark mb-4">{{ package.name }}</h2>
+        <p class="lead text-center text-muted mb-5">{{ package.description }}</p>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <p class="card-text"><strong>Duration:</strong> {{ package.duration }}</p>
+            </div>
+            <div class="col-md-4">
+                <p class="card-text"><strong>Difficulty Level:</strong> {{ package.difficulty_level }}</p>
+            </div>
+            <div class="col-md-4">
+                <p class="card-text"><strong>Price:</strong> Rs{{ package.price }}</p>
+            </div>
       </div>
-    </section>
-    <section class=" primary-subtle p-5">
+        {% if package.booking_available %}
+        <form id="bookingForm" method="post" action="{% url 'book_activity' package.id %}" class="mb-4">
+            {% csrf_token %}
+              <div class="form-group">
+                  <!-- Date -->
+                  <label for="booking_date" class="form-label">Date:</label>
+                  <input type="date" id="booking_date" name="date" class="form-control" required>
+                  <!-- Number of Participants -->
+            <form id="paymentForm" action="{% url 'initkhalti' %}" method="POST">
+                {% csrf_token %}
+                  <label for="booking_participants" class="form-label">Number of Participants:</label>
+                  <input type="number" id="booking_participants" name="participants" min="1" class="form-control" required>
+                  <!-- Special Requirements -->
+                  <label for="booking_special_requirements" class="form-label">Special Requirements (if any):</label>
+                  <textarea id="booking_special_requirements" name="special_requirements" rows="4" cols="50" class="form-control"></textarea>
+                  <button type="submit" class="btn btn-primary mt-3">Book Now</button>
+            </div>
+        </form>
+              <input type="hidden" name="purchase_order_id" value="{{ uuid_val }}">
+              <input type="hidden" name="amount" value="1000">
+              <input type="hidden" name="return_url" value="http://127.0.0.1:8000/return_url/{{ package.id }}">
+              <button type="submit" class="btn btn-success">Pay With Khalti</button>
+          </form>
+        {% else %}
+        <p class="card-text text-danger">Booking Not Available</p>
+        {% endif %}
+    </div>
+  </section>
       <h2 class="text-center text-black">Popular Packages</h2>
       <br>
       <br>
@@ -116,21 +155,19 @@
     <!--Footer-->
     {% include 'footer.html' %}
     <!--End Footer -->
-    <script>
-      // JavaScript code for slideshow
-      var slides = document.querySelectorAll('.slideshow .slide');
-      var currentSlide = 0;
-  
-      function nextSlide() {
-          slides[currentSlide].style.opacity = 0; // Hide current slide
-          currentSlide = (currentSlide + 1) % slides.length; // Move to the next slide
-          slides[currentSlide].style.opacity = 1; // Show next slide
-      }
-  
-      // Start slideshow
-      setInterval(nextSlide, 5000); // Change slide every 5 seconds
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script>
+      document.getElementById('booking_date').addEventListener('change', function() {
+          var inputDate = new Date(this.value);
+          var today = new Date();
+          today.setHours(0,0,0,0); // set time to 00:00:00.000
+      
+          if (inputDate < today) {
+              alert('The date must be a future date.');
+              this.value = ''; // clear the input
+          }
+      });
+    </script>
   </body>
 </html>

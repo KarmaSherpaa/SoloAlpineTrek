@@ -4,6 +4,7 @@ from .models import Destination , Activity , Package , Booking
 import json
 import requests
 import uuid
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def home(request):
@@ -47,10 +48,13 @@ def package_detail(request, package_id):
     uuid_val = uuid.uuid4()
     return render(request, 'packages.html', {'package': package, 'destinations': destinations, 'uuid_val': uuid_val, })
 
-
+@login_required
 def book_activity(request, package_id):
     uuid_val = uuid.uuid4()
     if request.method == 'POST':
+        if Booking.objects.filter(package_id=package_id, user=request.user).exists():
+            messages.error(request, 'You have already booked this package.')
+            return redirect('package_detail', package_id=package_id)
         package = get_object_or_404(Package, pk=package_id)
         # activity= get_object_or_404(Activity, pk=activity_id)
         date = request.POST.get('date')
@@ -70,10 +74,11 @@ def book_activity(request, package_id):
                 destination=destination,
                 date_booked=date,
                 participants=participants,
-                special_requirements=special_requirements
+                special_requirements=special_requirements,
+                payment_gateway=False  # Set to False for bookings without payment gateway
             )
             messages.success(request, 'Booking successful!')
-            return redirect('package_detail', package_id=package_id)
+            return redirect('/', package_id=package_id)
         else:
             messages.error(request, 'Please select a valid date and  specify the number of participants.')
             return redirect('package_detail', package_id=package_id)
@@ -92,6 +97,8 @@ def initkhalti(request):
     return_url = request.POST.get('return_url')
     amount = request.POST.get('amount')
     purchase_order_id = request.POST.get('purchase_order_id')
+    participants = request.POST.get('participants')
+    special_requirements = request.POST.get('special_requirements')
     print(return_url, amount, purchase_order_id)
 
     payload = json.dumps({
@@ -103,7 +110,9 @@ def initkhalti(request):
         "customer_info": {
         "name": user.full_name,
         "email": user.email,
-        "phone": user.contact
+        "phone": user.contact,
+        "participants":participants,
+        "special_requirements":special_requirements
         }
     })
 
@@ -122,36 +131,59 @@ def initkhalti(request):
     print(type(new_res))
     return redirect(new_res['payment_url'])
 
-def return_url(request):
-    return render(request, 'index.html')
-    # url = "https://a.khalti.com/api/v2/epayment/lookup/"
-    # if request.method == 'GET':
-    #     headers = {
-    #         'Authorization': 'key b885cd9d8dc04eebb59e6f12190ae017',
-    #         'Content-Type': 'application/json',
-    #     }
-    #     pidx = request.GET.get('pidx')
-    #     data = json.dumps({
-    #         'pidx':pidx
-    #     })
-    #     res = requests.request('POST',url,headers=headers,data=data)
-    #     print(res)
-    #     print(res.text)
+@login_required
+def return_url(request, package_id):
+    if request.method == 'GET':
+        print(request.GET) 
+        package = get_object_or_404(Package, pk=package_id)
+        date = request.GET.get('date')
+        participants = request.POST.get('participants')
+        special_requirements = request.POST.get('special_requirements')
+        print(f'Participants: {participants}, Special Requirements: {special_requirements}')  # Debug line
+        pidx = request.GET.get('pidx')
 
-    #     new_res = json.loads(res.text)
-    #     print(new_res)
-        
+        url = "https://a.khalti.com/api/v2/epayment/lookup/"
+        headers = {
+            'Authorization': 'key 99c941f5faf74fd2939cc9290c068d83',
+            'Content-Type': 'application/json',
+        }
+        data = json.dumps({
+            'pidx': pidx,
+            "participants":participants,
+            "special_requirements":special_requirements,
+        })
+        res = requests.post(url, headers=headers, data=data)
+        new_res = res.json()
 
-    #     if new_res['status'] == 'Completed':
-    #         # user = request.user
-    #         # user.has_verified_dairy = True
-    #         # user.save()
-    #         # perform your db interaction logic
-    #         pass
-        
-        # else:
-        #     # give user a proper error message
-        #     raise BadRequest("sorry ")
+        if new_res.get('status') == 'Completed':
+            activity = package.activities
+            destination = activity.destination
 
-        # return redirect('home')
+            # Create a new booking record
+            booking = Booking.objects.create(
+                user=request.user,
+                activity=activity,
+                package=package,
+                destination=destination,
+                date_booked=date,
+                participants=participants,
+                special_requirements=special_requirements,
+                pidx=new_res.get('pidx'),
+                status=new_res.get('status'),
+                transection_id=new_res.get('transaction_id'),
+                fee=new_res.get('fee'),
+                refunded=new_res.get('refunded'),
+                payment_gateway=True,
+                price=package.price,
+            )
+            messages.success(request, 'Booking successful!')
+            return redirect('package_detail', package_id=package_id)
+        else:
+            messages.error(request, 'Payment was not successful. Please try again.')
+            return redirect('package_detail', package_id=package_id)
+    else:
+        messages.error(request, 'Invalid request method.')
+        return redirect('package_detail', package_id=package_id)
     
+
+

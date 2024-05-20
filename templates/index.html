@@ -24,8 +24,28 @@
           font-size: 18px;
           transition: color 0.3s ease;
         }
-        
-
+        .my-message {
+          transform: translate(10px, 10px);
+      }
+      .form-container {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+        border: 1px solid #dee2e6; /* Adding a border */
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
     </style>
   </head>
   <body>
@@ -39,6 +59,10 @@
     <section class="hero-section hero-section-image">
       <div class="container d-flex justify-content-center align-items-center fs-1 test-white flex-Column ">
         <h1>SOLO ALPINE TREK</h1>
+          <div class="my-message w-50 mx-auto my-3" style="position: absolute; top: 60px; left: 4;">
+              {% include 'messages.html' %}
+          </div>
+        </div>
       </div>
     </section>
     <!--End Hero section-->
@@ -109,15 +133,47 @@
           </div>  
       </div>
     </section>
+    <section class="mt-5">
+      <div class="container">
+          <div class="col-md-6 offset-md-3 form-container">
+              <h1 class="text-center mb-4">Submit Inquiry</h1>
+  
+              <!-- Displaying messages -->
+  
+              <form method="POST" action="{% url 'submit_inquiry' %}" id="inquiryform" novalidate>
+                  {% csrf_token %}
+                  <div class="mb-3">
+                      <label for="subject" class="form-label">Subject</label>
+                      <input type="text" class="form-control" id="subject" name="subject" required>
+                      <div class="invalid-feedback">
+                          Please provide a subject.
+                      </div>
+                  </div>
+                  <div class="mb-3">
+                      <label for="inquiry" class="form-label">Inquiry</label>
+                      <textarea class="form-control" id="inquiry" name="inquiry" rows="3" required></textarea>
+                      <div class="invalid-feedback">
+                          Please provide your inquiry.
+                      </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100">Submit Inquiry</button>
+              </form>
+          </div>
+      </div>
+  </section>
     <section class=" primary-subtle p-5">
       <h2 class="text-center text-black">We are Associated with</h2>
       <br>
       <br>
-
+      
+      
       <figure>
-
+        
       </figure> 
     </section>
+    
+    
+
     <!--Footer-->
     {% include 'footer.html' %}
     <!--End Footer -->

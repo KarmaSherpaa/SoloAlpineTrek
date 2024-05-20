@@ -1,7 +1,7 @@
 <!-- navbar.html -->
 <nav class="navbar bg-secondary-subtle navbar-expand-lg fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand  me-auto" href="/">Logo</a>
+    <div class="container-fluid container-lg d-flex align-items-center position-relative">
+      <a class="navbar-brand  me-auto" href="/">SoloAlpineTrek</a>
       <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
             <div class="offcanvas-header">
               <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Logo</h5>
@@ -31,13 +31,14 @@
                 </li>  
                 </div>              
                 <li class="nav-item">
-                  <a class="nav-link mx-lg-2" href="#">Testimonials</a>
+                  <a class="nav-link mx-lg-2" href="{% url 'submit_feedback' %}">Feedback</a>
                 </li> 
               </ul>
             </div>
       </div>
       {% if request.user.is_authenticated %}
           <div class="dropdown ">
+            <img src="{{ request.user.get_profile_image }}" alt="Profile" class="rounded-circle" style="width: 40px; height: 4.0.0/dist/js/bootstrap.min.js0px;">
             <button class="login-button dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ request.user.username }}
             </button>

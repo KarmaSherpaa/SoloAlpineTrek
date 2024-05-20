@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 #Create your model here
 
@@ -12,6 +13,7 @@ def validate_contact(value):
         raise ValidationError('Contact number must be exactly 10 digits')
     if not value.startswith('9'):
         raise ValidationError('Contact number must start with 9')
+    
 
 #creating a User which extends Django Abstract User table
 class User(AbstractUser):
@@ -35,3 +37,29 @@ class UserProfile(models.Model):
 
     def __str__(self):
          return f'{self.id}'
+
+class Profile(models.Model):
+    user = models.OneToOneField(User , on_delete=models.CASCADE)
+    forget_password_token = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.email
+    
+
+class Inquiry(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=200)
+    inquiry = models.TextField()
+    response = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.subject
+    
+class feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feedback = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.feedback

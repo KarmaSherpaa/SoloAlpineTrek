@@ -1,33 +1,45 @@
+import uuid
 from django.db.models import Q
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
-from .models import User
-from home.models import Destination
+from .models import Inquiry, User, Profile
+from home.models import Booking, Destination 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from .helpers import send_forget_password_mail
 from datetime import datetime
 from django.core.exceptions import ValidationError
-from .forms import  ProfileImageForm
+from .forms import  FeedbackForm, InquiryForm, ProfileImageForm
 from .models import UserProfile
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 
 # check if string is email
-def is_email(string):
-    if '@' in string:
-        return True 
-    return False
-
 def signup(request):
-    destinations = Destination.objects.all()
     if request.method == 'POST':
-        username = request.POST.get('username')  # Retrieve username from form
+        username = request.POST.get('username')
         full_name = request.POST.get('full_name')
         email = request.POST.get('email')
         contact = request.POST.get('contact')
         address = request.POST.get('address')
         dob = request.POST.get('dob')
+        dob = datetime.strptime(dob, "%Y-%m-%d")  # assuming dob is in format 'YYYY-MM-DD'
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
+
+        if dob > datetime.now() - relativedelta(years=18):
+            messages.error(request, 'You must be at least 18 years old to register.')
+            return render(request, 'Signup.html')
+        # Check if passwords match
+        if len(password) < 8 or not any(char.islower() for char in password) or not any(char.isupper() for char in password) or not any(char.isdigit() for char in password):
+            messages.error(request, 'Password must contain at least 8 characters, at least one uppercase letter, at least one lowercase letter, and at least one number.')
+            return render(request, 'Signup.html')
+
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match')
+            return render(request, 'Signup.html')
+        # Check if username already exists
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists')
             context = {
@@ -42,15 +54,23 @@ def signup(request):
             }
             return render(request, 'Signup.html', context=context)
 
-        if password == confirm_password:
-            user = User.objects.create_user(username=username, full_name=full_name, dob=dob, email=email, address=address, contact=contact)
+        # Validate contact number
+        try:
+            user = User(username=username, email=email, full_name=full_name, contact=contact, address=address, dob=dob)
             user.set_password(password)
+            user.full_clean()  # This will validate the model fields
             user.save()
+
+            # Create user profile
             UserProfile.objects.create(user=user)
+
             messages.success(request, 'Registration Successful')
             return redirect('/Signin')
-  
-    return render(request, 'Signup.html' , {'destinations': destinations})
+        except ValidationError as e:
+            for field, error in e.message_dict.items():
+                messages.error(request, f"{field}: {error[0]}")
+
+    return render(request, 'Signup.html')
 
 
 def signin(request):
@@ -66,6 +86,7 @@ def signin(request):
             authenticated_user = authenticate(username=user.username, password=password)
             if authenticated_user is not None:
                 login(request, authenticated_user)
+                messages.success(request, 'You have successfully logged in.')
                 return redirect('/')
             else:
                 messages.error(request, 'Invalid Password')
@@ -103,6 +124,7 @@ def edit_profile(request):
         contact = request.POST.get('contact')
         address = request.POST.get('address')
         dob_str = request.POST.get('dob')
+        
         
         try:
             dob = datetime.strptime(dob_str, '%B %d, %Y').date()
@@ -145,3 +167,154 @@ def change_profile_pic(request):
             user_profile.save()
             messages.success(request, 'Profile picture changed successfully.')
     return redirect('profile')
+
+from django.contrib.auth import update_session_auth_hash
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        old_password = request.POST.get('password')
+        new_password = request.POST.get('newpassword')
+        confirm_password = request.POST.get('renewpassword')
+        user = request.user
+        if not user.check_password(old_password):
+            messages.error(request, 'Invalid old password')
+        elif new_password != confirm_password:
+            messages.error(request, 'Passwords do not match')
+        elif len(new_password) < 8 or not any(char.islower() for char in new_password) or not any(char.isupper() for char in new_password) or not any(char.isdigit() for char in new_password):
+            messages.error(request, 'Password must contain at least 8 characters, at least one uppercase letter, at least one lowercase letter, and at least one number.')
+        else:
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(request, user)  # This will update the session and keep the user logged in.
+            messages.success(request, 'Password changed successfully')
+    return redirect('profile')
+
+
+def ForgetPassword(request):
+        if request.method == 'POST':
+            email = request.POST.get('email')
+            
+            if not User.objects.filter(email=email).exists():
+                messages.error(request, 'No user found with this username.')
+                return redirect('/forget-password/')
+            else:
+                user_obj = User.objects.get(email=email)
+                token = str(uuid.uuid4())
+                profile_obj, created = Profile.objects.get_or_create(user=user_obj)
+                print("yaha samma aayo hai")
+                profile_obj.forget_password_token = token
+                profile_obj.save()
+                send_forget_password_mail(user_obj.email, token)
+                return redirect('forget_Message')
+
+        return render(request, 'forget-password.html')
+
+def ForgetMessage(request):
+    return render(request, 'forget-message.html')
+
+def ChangePassword(request):
+    return render(request, 'change-password.html')
+    # try:
+    #     profile_obj = Profile.objects.get(forget_password_token=token)
+    #     user = profile_obj.user
+    #     if request.method == 'POST':
+    #         new_password = request.POST.get('new_password')
+    #         confirm_password = request.POST.get('confirm_password')
+    #         ("Passowrd liyo ki nai")
+    #         if new_password != confirm_password:
+    #             messages.error(request, 'Passwords do not match.')
+    #             return render(request, 'change-password.html', {'token': token})
+    #         user.set_password(new_password)
+    #         user.save()
+            
+    #         # Clear forget password token
+    #         profile_obj.forget_password_token = ''
+    #         profile_obj.save()
+            
+    #         messages.success(request, 'Password changed successfully. Please login with your new password.')
+    #         return redirect('Signin')
+    # except Profile.DoesNotExist:
+    #     messages.error(request, 'Invalid token.')
+    #     return redirect('/forget-password/')
+    # except Exception as e:
+    #     messages.error(request, 'An error occurred.')
+    #     print(e)
+    
+    # return render(request, 'change-password.html', {'token': token})
+def bookings(request):
+    bookings = Booking.objects.filter(user=request.user)
+    return render(request, 'bookings.html', {'bookings': bookings})
+
+def update_booking(request):
+    return render(request, 'update_booking.html')
+
+def booking_updates(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    if request.method == 'POST':
+        date = request.POST.get('date')
+        participants = request.POST.get('participants')
+        special_requirements = request.POST.get('special_requirements')
+
+        if date:
+            booking.date_booked = date
+        if participants:
+            booking.participants = participants
+        if special_requirements:
+            booking.special_requirements = special_requirements
+
+        booking.save()
+        messages.success(request, 'Booking updated successfully.')
+        return redirect('bookings')
+
+    return render(request, 'update_booking.html', {'booking': booking})
+    
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id)
+    if request.user == booking.user:  # Ensure the user is authorized to cancel this booking
+        booking.delete()
+        messages.success(request, 'Booking cancelled successfully.')
+    return redirect('bookings')
+
+# def inquery(request):
+#     return render(request, 'inquery.html')
+
+@login_required
+def submit_inquiry(request):
+    if request.method == 'POST':
+        form = InquiryForm(request.POST)
+        if form.is_valid():
+            inquiry = form.save(commit=False)
+            inquiry.user = request.user
+            inquiry.save()
+            messages.success(request, 'Your inquiry has been submitted.')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = InquiryForm()
+    return render(request, '/', {'form': form})
+
+@login_required
+def inquiry(request):
+    # Fetch inquiries related to the logged-in user
+    inquiries = Inquiry.objects.filter(user=request.user)
+    return render(request, 'inquiry.html', {'inquiries': inquiries})
+
+def feedback(request):
+    return render(request, 'feedback.html')
+
+@login_required
+def submit_feedback(request):
+
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.user = request.user
+            feedback.save()
+            messages.success(request, 'Your feedback has been submitted.')
+            return redirect('/')
+    else:
+        form = FeedbackForm()
+    return render(request, 'feedback.html', {'form': form})
