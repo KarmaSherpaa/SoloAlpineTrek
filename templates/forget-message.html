@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Forgot Password</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .cards {
+            background-color: white;
+            padding: 30px;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 100px;
+        
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        }
+        .navbar-brand{
+            font-weight: 500;
+            color: #009970;
+            font-size: 24px;
+            transition: 0.3s color;
+        }
+        .navbar-toggler {
+            border: none;
+            font-size: 1.25rem;
+        }
+        .nav-link{
+            font-weight: 600;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .cards h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .cards button {
+            display: block;
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .options a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px; /* Adjust the font size as needed */
+            
+        }
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+        }
+
+        .password-field {
+            position: relative;
+        }
+        .remember-me label {
+            font-size: 15px; /* Adjust the font size as needed */
+        }
+
+        .show-password {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        .forgot-password {
+            margin-left: auto;
+        }
+        .messages {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+        .messages li {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .messages li.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .messages li.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .messages li.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .messages li.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% include 'navbar.html' %}
+    </header> 
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="text-center mb-4">
+                    <h2>SoloAlpineTrek.com</h2>
+                    <p>Follow the instructions to reset your password</p>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Forgot Password</h1>
+                        <ul class="messages">
+                            <li class="info">An email has been sent to your email address with instructions on how to reset your password</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

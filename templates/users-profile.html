@@ -27,6 +27,7 @@
   <!-- Template Main CSS File -->
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
 
+
 </head>
 
 <body>
@@ -64,11 +65,12 @@
 
   </header><!-- End Header -->
 
-  <!-- ======= Sidebar ======= -->  <aside id="sidebar" class="sidebar">
+  <!-- ======= Sidebar ======= -->  
+  <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
       <li class="nav-item">
-        <a class="nav-link " href='/Profile'>
+        <a class="nav-link  collapsed" href='/Profile'>
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
@@ -94,10 +96,10 @@
 
   <main id="main" class="main">
 
+    <div class="w-50 mx-auto my-3">
+      {% include 'messages.html' %}
+    </div>
     <div class="pagetitle">
-      <div class="w-50 mx-auto my-3">
-        {% include 'messages.html' %}
-      </div>
       <h1>Profile</h1>
       <nav>
         <ol class="breadcrumb">
@@ -198,11 +200,12 @@
                     </div>
                 
                     <div class="row mb-3">
-                        <label for="dob" class="col-md-4 col-lg-3 col-form-label">Date of Birth</label>
-                        <div class="col-md-8 col-lg-9">
-                            <input  required name="dob" type="text" type="date"   placeholder="Date of Birth"  class="form-control" id="dob" value="{{ dob }}">
-                        </div>
+                      <label for="dob" class="col-md-4 col-lg-3 col-form-label">Date of Birth</label>
+                      <div class="col-md-8 col-lg-9">
+                          <input name="dob" type="text" class="form-control" id="dob" value="{{ dob }}" placeholder="Nov. 5, 1999">
+                      </div>
                     </div>
+                  
                 
                     <div class="row mb-3">
                         <label for="contact" class="col-md-4 col-lg-3 col-form-label">Phone</label>
@@ -227,7 +230,7 @@
                 </div>
                 <div class="tab-pane fade profile-change-password pt-3" id="profile-change-password">
                   <!-- Change Password Form -->
-                  <form method="POST" action="{% url 'change_password' %}">
+                  <form method="POST" action="{% url 'update_password' %}">
                     {% csrf_token %}
                     <div class="row mb-3">
                         <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>

@@ -147,8 +147,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sherpanatsu@gmail.com'
-EMAIL_HOST_PASSWORD = 'karma123@sh#'
+EMAIL_HOST_USER = 'np03cs4a210053@heraldcollege.edu.np'
+EMAIL_HOST_PASSWORD = 'yzjijhjtyepomyny'
 
 
 
@@ -156,6 +156,8 @@ EMAIL_HOST_PASSWORD = 'karma123@sh#'
 # Define the custom Jazzmin settings
 JAZZMIN_SETTINGS = {
     "site_header": "Solo Alpine Trek",
+    "site_title": "Solo Alpine Trek",
+    
     "welcome_sign": "Welcome to Solo Alpine Trek",
     "show_ui_builder": True,
     "hide_models": ["auth.Group", "auth.User", "auth.Permission", "sites.Site", "sessions.Session", "admin.LogEntry"],

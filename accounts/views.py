@@ -118,41 +118,75 @@ def edit_profile(request):
     user = request.user
     
     if request.method == 'POST':
-        username = request.POST.get('username')
-        full_name = request.POST.get('full_name')
-        email = request.POST.get('email')
-        contact = request.POST.get('contact')
-        address = request.POST.get('address')
-        dob_str = request.POST.get('dob')
-        
-        
+        # Fetch form data, defaulting to existing values if not provided
+        username = request.POST.get('username', user.username)
+        full_name = request.POST.get('full_name', user.full_name)
+        email = request.POST.get('email', user.email)
+        contact = request.POST.get('contact', user.contact)
+        address = request.POST.get('address', user.address)
+        dob_str = request.POST.get('dob', user.dob.strftime('%b. %d, %Y') if user.dob else '')
+
+        # Handle Date of Birth
+        if dob_str:
+            try:
+                dob = datetime.strptime(dob_str, '%b. %d, %Y').date()
+                if dob > datetime.now().date():
+                    raise ValidationError('Date of Birth cannot be in the future.')
+            except ValueError:
+                messages.error(request, 'Invalid Date Format. Please use "MMM. D, YYYY" format.')
+                return render(request, 'users-profile.html', {
+                    "username": username,
+                    "full_name": full_name,
+                    "email": email,
+                    "dob": dob_str,
+                    "address": address,
+                    "contact": contact,
+                })
+            except ValidationError as e:
+                messages.error(request, str(e))
+                return render(request, 'users-profile.html', {
+                    "username": username,
+                    "full_name": full_name,
+                    "email": email,
+                    "dob": dob_str,
+                    "address": address,
+                    "contact": contact,
+                })
+        else:
+            dob = user.dob
+
+        # Validate contact number length
+        if contact and (len(contact) != 10 or not contact.isdigit()):
+            messages.error(request, 'Contact number must be exactly 10 digits.')
+            return render(request, 'users-profile.html', {
+                "username": username,
+                "full_name": full_name,
+                "email": email,
+                "dob": dob_str,
+                "address": address,
+                "contact": contact,
+            })
+
+        # Update user fields
+        user.username = username
+        user.full_name = full_name
+        user.email = email
+        user.contact = contact
+        user.address = address
+        user.dob = dob
+
         try:
-            dob = datetime.strptime(dob_str, '%B %d, %Y').date()
-            if dob > datetime.now().date():
-                raise ValidationError('Invalid Date of Birth')
-                
-            user.username = username
-            user.full_name = full_name
-            user.email = email
-            user.contact = contact
-            user.address = address
-            user.dob = dob
             user.save()
-            
-            messages.success(request, 'Profile updated successfully')
+            messages.success(request, 'Profile updated successfully.')
             return redirect('/Profile')
-        
-        except ValueError:
-            messages.error(request, 'Invalid Date Format')
-        
-        except ValidationError as e:
-            messages.error(request, str(e))
-    
+        except Exception as e:
+            messages.error(request, f'Error updating profile: {e}')
+
     return render(request, 'users-profile.html', {
         "username": user.username,
         "full_name": user.full_name,
         "email": user.email,
-        "dob": user.dob,
+        "dob": user.dob.strftime('%b. %d, %Y') if user.dob else '',
         "address": user.address,
         "contact": user.contact,
     })
@@ -171,7 +205,7 @@ def change_profile_pic(request):
 from django.contrib.auth import update_session_auth_hash
 
 @login_required
-def change_password(request):
+def update_password(request):
     if request.method == 'POST':
         old_password = request.POST.get('password')
         new_password = request.POST.get('newpassword')
@@ -213,35 +247,33 @@ def ForgetPassword(request):
 def ForgetMessage(request):
     return render(request, 'forget-message.html')
 
-def ChangePassword(request):
-    return render(request, 'change-password.html')
-    # try:
-    #     profile_obj = Profile.objects.get(forget_password_token=token)
-    #     user = profile_obj.user
-    #     if request.method == 'POST':
-    #         new_password = request.POST.get('new_password')
-    #         confirm_password = request.POST.get('confirm_password')
-    #         ("Passowrd liyo ki nai")
-    #         if new_password != confirm_password:
-    #             messages.error(request, 'Passwords do not match.')
-    #             return render(request, 'change-password.html', {'token': token})
-    #         user.set_password(new_password)
-    #         user.save()
+def ChangePassword(request, token):
+    try:
+        profile_obj = Profile.objects.get(forget_password_token=token)
+        user = profile_obj.user
+        if request.method == 'POST':
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+            if new_password != confirm_password:
+                messages.error(request, 'Passwords do not match.')
+                return render(request, 'change-password.html', {'token': token})
+            user.set_password(new_password)
+            user.save()
             
-    #         # Clear forget password token
-    #         profile_obj.forget_password_token = ''
-    #         profile_obj.save()
+            # Clear forget password token
+            profile_obj.forget_password_token = ''
+            profile_obj.save()
             
-    #         messages.success(request, 'Password changed successfully. Please login with your new password.')
-    #         return redirect('Signin')
-    # except Profile.DoesNotExist:
-    #     messages.error(request, 'Invalid token.')
-    #     return redirect('/forget-password/')
-    # except Exception as e:
-    #     messages.error(request, 'An error occurred.')
-    #     print(e)
+            messages.success(request, 'Password changed successfully. Please login with your new password.')
+            return redirect('/Signin')
+    except Profile.DoesNotExist:
+        messages.error(request, 'Invalid token.')
+        return redirect('/forget-password/')
+    except Exception as e:
+        messages.error(request, 'An error occurred.')
+        print(e)
     
-    # return render(request, 'change-password.html', {'token': token})
+    return render(request, 'change-password.html', {'token': token})
 def bookings(request):
     bookings = Booking.objects.filter(user=request.user)
     return render(request, 'bookings.html', {'bookings': bookings})
