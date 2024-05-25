@@ -24,7 +24,11 @@ def signup(request):
         contact = request.POST.get('contact')
         address = request.POST.get('address')
         dob = request.POST.get('dob')
-        dob = datetime.strptime(dob, "%Y-%m-%d")  # assuming dob is in format 'YYYY-MM-DD'
+        try:
+            dob = datetime.strptime(dob, "%Y-%m-%d")  # assuming dob is in format 'YYYY-MM-DD'
+        except ValueError:
+            messages.error(request, 'Invalid date format. Expected YYYY-MM-DD.')
+            return render(request, 'Signup.html')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
@@ -107,7 +111,7 @@ def profile(request):
         "username": user.username,
         "full_name": user.full_name,
         "email": user.email,
-        "dob": user.dob,
+        "dob": user.dob.strftime('%Y-%m-%d') if user.dob else '',
         "address": user.address,
         "contact": user.contact,
     }
@@ -124,16 +128,16 @@ def edit_profile(request):
         email = request.POST.get('email', user.email)
         contact = request.POST.get('contact', user.contact)
         address = request.POST.get('address', user.address)
-        dob_str = request.POST.get('dob', user.dob.strftime('%b. %d, %Y') if user.dob else '')
+        dob_str = request.POST.get('dob', user.dob.strftime('%Y-%m-%d') if user.dob else '')
 
         # Handle Date of Birth
         if dob_str:
             try:
-                dob = datetime.strptime(dob_str, '%b. %d, %Y').date()
+                dob = datetime.strptime(dob_str, '%Y-%m-%d').date()
                 if dob > datetime.now().date():
                     raise ValidationError('Date of Birth cannot be in the future.')
             except ValueError:
-                messages.error(request, 'Invalid Date Format. Please use "MMM. D, YYYY" format.')
+                messages.error(request, 'Invalid Date Format. Please use " "Y-m-d"" format.')
                 return render(request, 'users-profile.html', {
                     "username": username,
                     "full_name": full_name,
@@ -186,7 +190,7 @@ def edit_profile(request):
         "username": user.username,
         "full_name": user.full_name,
         "email": user.email,
-        "dob": user.dob.strftime('%b. %d, %Y') if user.dob else '',
+        "dob": user.dob.strftime('%Y-%m-%d') if user.dob else '',
         "address": user.address,
         "contact": user.contact,
     })
@@ -333,12 +337,13 @@ def inquiry(request):
     inquiries = Inquiry.objects.filter(user=request.user)
     return render(request, 'inquiry.html', {'inquiries': inquiries})
 
-def feedback(request):
-    return render(request, 'feedback.html')
+@login_required
+def feedback(request ):
+    destinations = Destination.objects.all()
+    return render(request, 'feedback.html' , {'destinations': destinations})
 
 @login_required
 def submit_feedback(request):
-
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
         if form.is_valid():

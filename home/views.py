@@ -90,6 +90,7 @@ def generate_uuid(request):
     }
     return render(request, 'packages.html',context)
 
+@login_required
 def initkhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/initiate/"
     user= request.user

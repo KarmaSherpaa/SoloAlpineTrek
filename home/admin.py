@@ -10,7 +10,6 @@ class DestinationAdmin(admin.ModelAdmin):
     inlines = [ImageInline]  # Add ImageInline to the Destination admin
 
 admin.site.register(Destination, DestinationAdmin)
-admin.site.register(Image)
 
 admin.site.register(Activity)
 admin.site.register(Package)

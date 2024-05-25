@@ -19,11 +19,6 @@
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
   <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
-
   <!-- Template Main CSS File -->
   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
 
@@ -38,9 +33,9 @@
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="/" class="logo d-flex align-items-center">
-        <span class="d-none d-lg-block">SoloAlpineTrek</span>
+        <span class="d-none d-lg-block" >SoloAlpineTrek</span>
       </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
+      <i class="bi bi-list toggle-sidebar-btn" ></i>
     </div><!-- End Logo -->
 
     <nav class="header-nav ms-auto">
@@ -55,11 +50,7 @@
                 <i class="bi bi-box-arrow-right"></i>
                 <span href="#" >Sign Out</span>
               </a>
-            </li>
-
           </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
-
       </ul>
     </nav><!-- End Icons Navigation -->
 
@@ -202,7 +193,7 @@
                     <div class="row mb-3">
                       <label for="dob" class="col-md-4 col-lg-3 col-form-label">Date of Birth</label>
                       <div class="col-md-8 col-lg-9">
-                          <input name="dob" type="text" class="form-control" id="dob" value="{{ dob }}" placeholder="Nov. 5, 1999">
+                          <input name="dob" type="text" class="form-control" id="dob" value="{{ dob }}" placeholder="1999. NOV, 05">
                       </div>
                     </div>
                   
@@ -279,15 +270,8 @@
   </footer><!-- End Footer -->
 
   <!-- Vendor JS Files -->
-  <script src="{% static 'assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/chart.js/chart.umd.js' %}"></script>
-  <script src="{% static 'assets/vendor/echarts/echarts.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/quill/quill.js' %}"></script>
-  <script src="{% static 'assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
-  <script src="{% static 'assets/vendor/tinymce/tinymce.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
 
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
   <script>
