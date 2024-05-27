@@ -5,6 +5,7 @@ import json
 import requests
 import uuid
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 # Create your views here.
 
 def home(request):
@@ -57,7 +58,10 @@ def book_activity(request, package_id):
             return redirect('package_detail', package_id=package_id)
         package = get_object_or_404(Package, pk=package_id)
         # activity= get_object_or_404(Activity, pk=activity_id)
+        date_str = request.POST.get('date')
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
         date = request.POST.get('date')
+        print(date)  
         # activity_id = request.POST.get('activity_id')  # Assuming activity_id is passed through the form
         participants = request.POST.get('participants')
         special_requirements = request.POST.get('special_requirements')
@@ -72,7 +76,7 @@ def book_activity(request, package_id):
                 activity=activity,
                 package=package,
                 destination=destination,
-                date_booked=date,
+                date=date,
                 participants=participants,
                 special_requirements=special_requirements,
                 payment_gateway=False  # Set to False for bookings without payment gateway
@@ -94,14 +98,16 @@ def generate_uuid(request):
 def initkhalti(request):
     url = "https://a.khalti.com/api/v2/epayment/initiate/"
     user= request.user
-
     return_url = request.POST.get('return_url')
     amount = request.POST.get('amount')
     purchase_order_id = request.POST.get('purchase_order_id')
+    date = request.POST.get('date')
     participants = request.POST.get('participants')
     special_requirements = request.POST.get('special_requirements')
-    print(return_url, amount, purchase_order_id)
-
+  
+    request.session['date'] = date
+    request.session['participants'] = participants
+    request.session['special_requirements'] = special_requirements
     payload = json.dumps({
         "return_url": return_url,
         "website_url": "http://127.0.0.1:8000/",
@@ -112,8 +118,6 @@ def initkhalti(request):
         "name": user.full_name,
         "email": user.email,
         "phone": user.contact,
-        "participants":participants,
-        "special_requirements":special_requirements
         }
     })
 
@@ -137,9 +141,9 @@ def return_url(request, package_id):
     if request.method == 'GET':
         print(request.GET) 
         package = get_object_or_404(Package, pk=package_id)
-        date = request.GET.get('date')
-        participants = request.POST.get('participants')
-        special_requirements = request.POST.get('special_requirements')
+        date = request.session.get('date')
+        participants = request.session.get('participants')
+        special_requirements = request.session.get('special_requirements')
         print(f'Participants: {participants}, Special Requirements: {special_requirements}')  # Debug line
         pidx = request.GET.get('pidx')
 
@@ -166,7 +170,7 @@ def return_url(request, package_id):
                 activity=activity,
                 package=package,
                 destination=destination,
-                date_booked=date,
+                date=date,
                 participants=participants,
                 special_requirements=special_requirements,
                 pidx=new_res.get('pidx'),

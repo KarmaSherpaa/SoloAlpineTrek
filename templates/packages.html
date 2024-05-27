@@ -124,23 +124,25 @@
                   <label for="booking_date" class="form-label">Date:</label>
                   <input type="date" id="booking_date" name="date" class="form-control" required>
                   <!-- Number of Participants -->
-            <form id="paymentForm" action="{% url 'initkhalti' %}" method="POST">
-                {% csrf_token %}
                   <label for="booking_participants" class="form-label">Number of Participants:</label>
                   <input type="number" id="booking_participants" name="participants" min="1" class="form-control" required>
                   <!-- Special Requirements -->
                   <label for="booking_special_requirements" class="form-label">Special Requirements (if any):</label>
                   <textarea id="booking_special_requirements" name="special_requirements" rows="4" cols="50" class="form-control"></textarea>
-                  <button type="submit" class="btn btn-primary mt-3">Book Now</button>
-            </div>
+                  <button type="submit" class="btn btn-primary mt-3" id="bookNowButton">Book Now</button>
+                </div>
         </form>
+        <form id="paymentForm" action="{% url 'initkhalti' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" id="payment_date" name="date">
+              <input type="hidden" id="payment_participants" name="participants">
+              <input type="hidden" id="payment_special_requirements" name="special_requirements">
               <input type="hidden" name="purchase_order_id" value="{{ uuid_val }}">
               <input type="hidden" name="amount" value="1000">
               <input type="hidden" name="return_url" value="http://127.0.0.1:8000/return_url/{{ package.id }}">
-              <button type="submit" class="btn btn-success">Pay With Khalti</button>
-          </form>
+        </form>
         {% else %}
-        <p class="card-text text-danger">Booking Not Available</p>
+         <p class="card-text text-danger">Booking Not Available</p>
         {% endif %}
     </div>
   </section>
@@ -168,6 +170,25 @@
               alert('The date must be a future date.');
               this.value = ''; // clear the input
           }
+      });
+      document.getElementById('bookNowButton').addEventListener('click', function(e) {
+        e.preventDefault();
+        var date = document.getElementById('booking_date').value;
+        document.getElementById('payment_date').value = date;
+        var bookingParticipants = document.getElementById('booking_participants');
+        if (bookingParticipants.value === '') {
+            alert('Please enter the number of participants.');
+            return;
+        }
+        // Copy values from bookingForm to paymentForm
+        document.getElementById('payment_date').value = document.getElementById('booking_date').value;
+        document.getElementById('payment_participants').value = bookingParticipants.value;
+        document.getElementById('payment_special_requirements').value = document.getElementById('booking_special_requirements').value;
+        if (confirm('Do you want to pay using Khalti?')) {
+            document.getElementById('paymentForm').submit();
+        } else {
+            document.getElementById('bookingForm').submit();
+        }
       });
     </script>
   </body>

@@ -46,7 +46,7 @@ class Booking(models.Model):
     package = models.ForeignKey(Package, on_delete=models.CASCADE)  
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE) 
     date_booked = models.DateField(auto_now_add=True,null=True,blank=True)
-    date = models.DateField(default=timezone.now,null=True,blank=True),  # Field for the date of the booking
+    date = models.DateField()
     participants = models.IntegerField(default=1, validators=[MinValueValidator(1)],null=True,blank=True)  # Field for the number of participants
     special_requirements = models.TextField(blank=True, null=True)  # Field for special requirements
     payment_gateway = models.BooleanField(default=False)  # Field to indicate if booking is through payment gateway

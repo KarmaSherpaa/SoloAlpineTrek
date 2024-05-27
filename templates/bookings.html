@@ -6,7 +6,6 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Users / Profile - NiceAdmin Bootstrap Template</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -95,7 +94,7 @@
     </ul>
 
   </aside><!-- End Sidebar-->
-
+<br>
   <main id="main" class="main">
 
     <div class="pagetitle">
@@ -109,7 +108,7 @@
       </nav>
     </div><!-- End Page Title -->
     <h2>Your Bookings</h2>
-    <div class="my-message w-50 mx-auto my-3" style="position: absolute; top: 60px; right: 300px;">
+    <div class="my-message w-50 mx-auto my-3" style="position: absolute; top: 80px; right: 300px;">
         {% include 'messages.html' %}
     </div>
 
@@ -123,7 +122,13 @@
             <h5 class="card-title">{{ booking.package.name }}</h5>
             <p class="card-text">Booked on: {{ booking.date_booked }}</p>
             <p class="card-text">Participants: {{ booking.participants }}</p>
-            <p class="card-text">Payment: {{ booking.payment_gateway }}</p>
+            <p class="card-text">Payment: 
+              {% if booking.payment_gateway %}
+                  Successful
+              {% else %}
+                  Pending
+              {% endif %}
+            </p>
             {% if booking.special_requirements %}
                 <p class="card-text">Special Requirements: {{ booking.special_requirements }}</p>
             {% endif %}

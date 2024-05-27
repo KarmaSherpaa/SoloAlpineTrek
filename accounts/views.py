@@ -7,11 +7,10 @@ from home.models import Booking, Destination
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .helpers import send_forget_password_mail
-from datetime import datetime
 from django.core.exceptions import ValidationError
 from .forms import  FeedbackForm, InquiryForm, ProfileImageForm
 from .models import UserProfile
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 
@@ -288,16 +287,21 @@ def update_booking(request):
 def booking_updates(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
     if request.method == 'POST':
-        date = request.POST.get('date')
+        date_str = request.POST.get('date')
         participants = request.POST.get('participants')
         special_requirements = request.POST.get('special_requirements')
 
-        if date:
+        if date_str:
+            date = datetime.strptime(date_str, '%Y-%m-%d').date()
+            if date <= datetime.now().date():
+                messages.error(request, 'Booking date should be a future date.')
+                return render(request, 'update_booking.html', {'booking': booking})
             booking.date_booked = date
         if participants:
             booking.participants = participants
         if special_requirements:
             booking.special_requirements = special_requirements
+
 
         booking.save()
         messages.success(request, 'Booking updated successfully.')
