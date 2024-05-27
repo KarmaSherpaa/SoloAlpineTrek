@@ -139,6 +139,9 @@ def initkhalti(request):
 @login_required
 def return_url(request, package_id):
     if request.method == 'GET':
+        if Booking.objects.filter(package_id=package_id, user=request.user).exists():
+            messages.error(request, 'You have already booked this package.')
+            return redirect('package_detail', package_id=package_id)
         print(request.GET) 
         package = get_object_or_404(Package, pk=package_id)
         date = request.session.get('date')
@@ -182,7 +185,7 @@ def return_url(request, package_id):
                 price=package.price,
             )
             messages.success(request, 'Booking successful!')
-            return redirect('package_detail', package_id=package_id)
+            return redirect('/', package_id=package_id)
         else:
             messages.error(request, 'Payment was not successful. Please try again.')
             return redirect('package_detail', package_id=package_id)
@@ -190,5 +193,11 @@ def return_url(request, package_id):
         messages.error(request, 'Invalid request method.')
         return redirect('package_detail', package_id=package_id)
     
+from django.http import JsonResponse
 
-
+def check_booking(request, package_id):
+    if request.user.is_authenticated:
+        already_booked = Booking.objects.filter(package_id=package_id, user=request.user).exists()
+        return JsonResponse({'already_booked': already_booked})
+    else:
+        return JsonResponse({'already_booked': False})

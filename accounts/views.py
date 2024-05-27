@@ -296,7 +296,7 @@ def booking_updates(request, booking_id):
             if date <= datetime.now().date():
                 messages.error(request, 'Booking date should be a future date.')
                 return render(request, 'update_booking.html', {'booking': booking})
-            booking.date_booked = date
+            booking.date = date
         if participants:
             booking.participants = participants
         if special_requirements:
