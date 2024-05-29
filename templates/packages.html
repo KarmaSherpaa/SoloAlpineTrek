@@ -113,32 +113,32 @@
             </div>
       </div>
         {% if package.booking_available %}
-        <form id="bookingForm" method="post" action="{% url 'book_activity' package.id %}" class="mb-4">
-            {% csrf_token %}
-              <div class="form-group">
-                  <!-- Date -->
-                  <label for="booking_date" class="form-label">Date:</label>
-                  <input type="date" id="booking_date" name="date" class="form-control" required>
-                  <!-- Number of Participants -->
-                  <label for="booking_participants" class="form-label">Number of Participants:</label>
-                  <input type="number" id="booking_participants" name="participants" min="1" class="form-control" required>
-                  <!-- Special Requirements -->
-                  <label for="booking_special_requirements" class="form-label">Special Requirements (if any):</label>
-                  <textarea id="booking_special_requirements" name="special_requirements" rows="4" cols="50" class="form-control"></textarea>
-                  <button type="submit" class="btn btn-primary mt-3" id="bookNowButton">Book Now</button>
-                </div>
-        </form>
-        <form id="paymentForm" action="{% url 'initkhalti' %}" method="POST">
+          <form id="bookingForm" method="post" action="{% url 'book_activity' package.id %}" class="mb-4">
               {% csrf_token %}
-              <input type="hidden" id="payment_date" name="date">
-              <input type="hidden" id="payment_participants" name="participants">
-              <input type="hidden" id="payment_special_requirements" name="special_requirements">
-              <input type="hidden" name="purchase_order_id" value="{{ uuid_val }}">
-              <input type="hidden" name="amount" value="1000">
-              <input type="hidden" name="return_url" value="http://127.0.0.1:8000/return_url/{{ package.id }}">
-        </form>
+                <div class="form-group">
+                    <!-- Date -->
+                    <label for="booking_date" class="form-label">Date:</label>
+                    <input type="date" id="booking_date" name="date" class="form-control" required>
+                    <!-- Number of Participants -->
+                    <label for="booking_participants" class="form-label">Number of Participants:</label>
+                    <input type="number" id="booking_participants" name="participants" min="1" class="form-control" required>
+                    <!-- Special Requirements -->
+                    <label for="booking_special_requirements" class="form-label">Special Requirements (if any):</label>
+                    <textarea id="booking_special_requirements" name="special_requirements" rows="4" cols="50" class="form-control"></textarea>
+                    <button type="submit" class="btn btn-primary mt-3" id="bookNowButton">Book Now</button>
+                  </div>
+          </form>
+          <form id="paymentForm" action="{% url 'initkhalti' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" id="payment_date" name="date">
+                <input type="hidden" id="payment_participants" name="participants">
+                <input type="hidden" id="payment_special_requirements" name="special_requirements">
+                <input type="hidden" name="purchase_order_id" value="{{ uuid_val }}">
+                <input type="hidden" name="amount" value="1000">
+                <input type="hidden" name="return_url" value="http://127.0.0.1:8000/return_url/{{ package.id }}">
+          </form>
         {% else %}
-         <p class="card-text text-danger">Booking Not Available</p>
+          <p class="card-text text-danger">Booking Not Available</p>
         {% endif %}
     </div>
   </section>

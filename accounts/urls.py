@@ -3,6 +3,7 @@ from . import views  # Import the missing module
 
 
 urlpatterns = [
+    path("about_us/", views.about_us, name="about_us"),
     path("Signin", views.signin, name="signin"),
     path("Signup", views.signup, name="signup"),
     path("Signout", views.signout, name="signout"),
@@ -18,8 +19,10 @@ urlpatterns = [
     path('update_booking/', views.update_booking, name='update_booking'),
     path('booking_updates/<int:booking_id>/', views.booking_updates, name='booking_updates'),
     path('inquiry/', views.inquiry, name='inquiry'),
+    path('contact_us/', views.contact_us, name='contact_us'),
     path('submit_inquiry/', views.submit_inquiry, name='submit_inquiry'),
     path('feedback/', views.feedback, name='feedback'),
     path('submit_feedback/', views.submit_feedback, name='submit_feedback'),
 ]
+
 

@@ -5,8 +5,9 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <title>Solo Aalpine Trek</title>
     <style>
         .navbar-brand{
@@ -46,6 +47,14 @@
               background-color: #0056b3;
               border-color: #004085;
           }
+          .card-image {
+            width: 100%;  /* This will make the image take up the full width of the card */
+            height: 200px;  /* This will set the height of the image */
+            object-fit: cover;  /* This will scale the image to cover the area of the image box, cropping it if necessary */
+        }
+        .card-flex .card-body {
+          flex-grow: 1;
+        }
     </style>
   </head>
   <body>
@@ -78,7 +87,7 @@
             backed by our recognition from the Government of Nepal.
           </p> 
           <div class="text-center d-flex justify-content-center">
-            <button type="button" class="btn btn-secondary align-items-center">Read more</button>
+           <a class="btn btn-secondary align-items-center" href="{% url 'about_us' %}">Read more</a>
           </div>
 
       </div>
@@ -89,91 +98,52 @@
       <br>
       <div class="container ">
           <div class="row g-4 ">
-            <div class="col-lg">
-              <div class="card  bg-light">
-                <img src="{%static 'img/eve.jpeg' %}" class="card-img-top" alt="...">
-                <div class="card-body text-center p-5">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Read more</a>
-                </div>
+              {% for package in packages %}
+              <div class="col-lg-4">
+                  <div class="card bg-light card-flex">
+                      <img src="{{ package.image.url }}" class="card-img-top card-image" alt="...">
+                      <div class="card-body text-center p-5">
+                          <h5 class="card-title">{{ package.name }}</h5>
+                          <p class="card-text">{{ package.description|truncatechars:50 }}</p>
+                          <a href="{% url 'package_detail' package.id %}" class="btn btn-primary">Read more</a>
+                      </div>
+                  </div> 
               </div> 
-            </div> 
-            <div class="col-lg-4">
-              <div class="card bg-light" >
-                <img src="{%static 'img/eve.jpeg' %}" class="card-img-top" alt="...">
-                <div class="card-body text-center p-5">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Read more</a>
-                </div>
-              </div> 
-            </div> 
-            <div class="col-lg-4">
-              <div class="card bg-light">
-                <img src="{%static 'img/eve.jpeg' %}" class="card-img-top" alt="...">
-                <div class="card-body text-center p-5">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Read more</a>
-                </div>
-              </div> 
-            </div> 
-            <div class="col-lg-4">
-              <div class="card  bg-light">
-                <img src="{%static 'img/eve.jpeg' %}" class="card-img-top" alt="...">
-                <div class="card-body text-center p-5">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Read more</a>
-                </div>
-              </div> 
-            </div> 
-
+              {% empty %}
+              <div class="col-lg-4">
+                  <p>No packages available.</p>
+              </div>
+              {% endfor %}
           </div>  
       </div>
     </section>
-    <section class="mt-5">
+    <br>
+    <section class="testimonials">
       <div class="container">
-          <div class="col-md-6 offset-md-3 form-container">
-              <h1 class="text-center mb-4">Submit Inquiry</h1>
-  
-              <!-- Displaying messages -->
-  
-              <form method="POST" action="{% url 'submit_inquiry' %}" id="inquiryform" novalidate>
-                  {% csrf_token %}
-                  <div class="mb-3">
-                      <label for="subject" class="form-label">Subject</label>
-                      <input type="text" class="form-control" id="subject" name="subject" required>
-                      <div class="invalid-feedback">
-                          Please provide a subject.
-                      </div>
-                  </div>
-                  <div class="mb-3">
-                      <label for="inquiry" class="form-label">Inquiry</label>
-                      <textarea class="form-control" id="inquiry" name="inquiry" rows="3" required></textarea>
-                      <div class="invalid-feedback">
-                          Please provide your inquiry.
-                      </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary w-100">Submit Inquiry</button>
-              </form>
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="text-center mb-4">Feedback</h2>
           </div>
+        </div>
+        <div class="row">
+          {% for feedback in feedbacks %}
+          <div class="col-md-4">
+            <div class="testimonial-slide">
+              <div class="testimonial-content">
+                <p class="testimonial-text">"{{ feedback.feedback }}"</p>
+                <div class="testimonial-author d-flex justify-content-center align-items-center">
+                  <img src="{{ feedback.user.get_profile_image }}" alt="Profile" class="rounded-circle">
+                  <div class="author-info">
+                    <h5>{{ feedback.user.username }}</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
       </div>
-  </section>
-    <section class=" primary-subtle p-5">
-      <h2 class="text-center text-black">We are Associated with</h2>
-      <br>
-      <br>
-      
-      
-      <figure>
-        
-      </figure> 
     </section>
-    
-    
-
     <!--Footer-->
     {% include 'footer.html' %}
     <!--End Footer -->

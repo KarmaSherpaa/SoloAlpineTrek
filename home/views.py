@@ -6,19 +6,32 @@ import requests
 import uuid
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from accounts.models import feedback
+from django.db.models import Count
+from random import randint
 # Create your views here.
 
 def home(request):
     destinations = Destination.objects.all()
+    count = feedback.objects.aggregate(count=Count('id'))['count']
+    random_index = randint(0, count - 3)
+    feedbacks = feedback.objects.all()[random_index:random_index + 3]
     
     # Get the currently logged-in user's name if available
     user_name = None
+    recent_booking = None
     if request.user.is_authenticated:
         user_name = request.user.username
+       
+
+    # Get the most booked package
+    packages = Package.objects.annotate(num_bookings=Count('booking')).order_by('-num_bookings')[:6]
 
     context = {
         'destinations': destinations,
-        'user_name': user_name  # Include the user's name in the context
+        'feedbacks': feedbacks,
+        'user_name': user_name,  # Include the user's name in the context
+        'packages': packages,
     }
     return render(request, "index.html", context)
 
@@ -201,3 +214,4 @@ def check_booking(request, package_id):
         return JsonResponse({'already_booked': already_booked})
     else:
         return JsonResponse({'already_booked': False})
+ 

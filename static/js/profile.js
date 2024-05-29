@@ -1,10 +1,4 @@
-/**
-* Template Name: NiceAdmin
-* Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-* Updated: Apr 20 2024 with Bootstrap v5.3.3
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
+
 
 (function() {
   "use strict";
@@ -260,60 +254,5 @@
     content_css: useDarkMode ? 'dark' : 'default',
     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
   });
-
-  /**
-   * Initiate Bootstrap validation check
-   */
-  var needsValidation = document.querySelectorAll('.needs-validation')
-
-  Array.prototype.slice.call(needsValidation)
-    .forEach(function(form) {
-      form.addEventListener('submit', function(event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
-
-        form.classList.add('was-validated')
-      }, false)
-    })
-
-  /**
-   * Initiate Datatables
-   */
-  const datatables = select('.datatable', true)
-  datatables.forEach(datatable => {
-    new simpleDatatables.DataTable(datatable, {
-      perPageSelect: [5, 10, 15, ["All", -1]],
-      columns: [{
-          select: 2,
-          sortSequence: ["desc", "asc"]
-        },
-        {
-          select: 3,
-          sortSequence: ["desc"]
-        },
-        {
-          select: 4,
-          cellClass: "green",
-          headerClass: "red"
-        }
-      ]
-    });
-  })
-
-  /**
-   * Autoresize echart charts
-   */
-  const mainContainer = select('#main');
-  if (mainContainer) {
-    setTimeout(() => {
-      new ResizeObserver(function() {
-        select('.echart', true).forEach(getEchart => {
-          echarts.getInstanceByDom(getEchart).resize();
-        })
-      }).observe(mainContainer);
-    }, 200);
-  }
 
 })();

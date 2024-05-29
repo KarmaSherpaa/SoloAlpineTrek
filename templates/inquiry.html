@@ -19,7 +19,7 @@
 
 
   <!-- Template Main CSS File -->
-  <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
   <style>
         .custom-margin-left {
           margin-right: 330px; /* Adjust this value as needed */
@@ -63,34 +63,9 @@
   
 
   <!-- ======= Header ======= -->
-  <header id="header" class="header fixed-top d-flex align-items-center">
-
-    <div class="d-flex align-items-center justify-content-between custom-align-right">
-      <a href="/" class="logo d-flex align-items-center custom-spacing">
-        <span class="d-none d-lg-block fs-4 fw-normal" >SoloAlpineTrek</span>
-      </a>
-      <i class="bi bi-list toggle-sidebar-btn"></i>
-    </div><!-- End Logo -->
-
-    <nav class="header-nav ms-auto">
-      <ul class="d-flex align-items-center">
-        <li class="nav-item dropdown pe-3">
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="" data-bs-toggle="dropdown">
-            <img src="{{ request.user.get_profile_image }}" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">{{ user.username }}</span>
-          </a><!-- End Profile Iamge Icon -->
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-              <a class="dropdown-item d-flex align-items-center" href="/Signout">
-                <i class="bi bi-box-arrow-right"></i>
-                <span href="#" >Sign Out</span>
-              </a>
-            </li>
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
-
-      </ul>
-    </nav><!-- End Icons Navigation -->
+   <!-- ======= Header ======= -->
+   <header>
+    {% include 'profile_header.html' %}
 
   </header><!-- End Header -->
 
@@ -130,7 +105,7 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/">Home</a></li>
           <li class="breadcrumb-item">Users</li>
-          <li class="breadcrumb-item active">bookings</li>
+          <li class="breadcrumb-item active">Inquiry</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -163,7 +138,7 @@
   <!-- Vendor JS Files -->
   <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <!-- Template Main JS File -->
-  <script src="{% static 'assets/js/main.js' %}"></script>
+  <script src="{% static 'js/profile.js' %}"></script>
 
 </body>
 

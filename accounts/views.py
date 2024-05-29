@@ -13,7 +13,9 @@ from .models import UserProfile
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-
+def about_us(request):
+    destinations=Destination.objects.all()
+    return render(request, 'about.html', {'destinations': destinations})
 # check if string is email
 def signup(request):
     if request.method == 'POST':
@@ -90,7 +92,10 @@ def signin(request):
             if authenticated_user is not None:
                 login(request, authenticated_user)
                 messages.success(request, 'You have successfully logged in.')
-                return redirect('/')
+                if authenticated_user.is_staff or authenticated_user.is_superuser:
+                    return redirect('/admin')
+                else:
+                    return redirect('/')
             else:
                 messages.error(request, 'Invalid Password')
         else:
@@ -278,6 +283,7 @@ def ChangePassword(request, token):
     
     return render(request, 'change-password.html', {'token': token})
 def bookings(request):
+    
     bookings = Booking.objects.filter(user=request.user)
     return render(request, 'bookings.html', {'bookings': bookings})
 
@@ -339,7 +345,15 @@ def submit_inquiry(request):
 def inquiry(request):
     # Fetch inquiries related to the logged-in user
     inquiries = Inquiry.objects.filter(user=request.user)
+    
     return render(request, 'inquiry.html', {'inquiries': inquiries})
+
+@login_required
+def contact_us(request):
+    # Fetch inquiries related to the logged-in user
+    inquiries = Inquiry.objects.filter(user=request.user)
+    destinations = Destination.objects.all()
+    return render(request, 'contact_us.html', {'inquiries': inquiries, 'destinations': destinations})
 
 @login_required
 def feedback(request ):
@@ -359,3 +373,4 @@ def submit_feedback(request):
     else:
         form = FeedbackForm()
     return render(request, 'feedback.html', {'form': form})
+

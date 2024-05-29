@@ -12,5 +12,4 @@ urlpatterns = [
     path('return_url/<int:package_id>/', views.return_url, name='return_url'),
     path('generate_uuid', views.generate_uuid, name='generate_uuid'),
     path('check_booking/<int:package_id>/', views.check_booking, name='check_booking'),
-
-]
+]   
