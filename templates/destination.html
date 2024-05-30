@@ -35,6 +35,14 @@
             width: 100%;
             height: 100vh;
         }
+        .card-image {
+          width: 100%;  /* This will make the image take up the full width of the card */
+          height: 200px;  /* This will set the height of the image */
+          object-fit: cover;  /* This will scale the image to cover the area of the image box, cropping it if necessary */
+        }
+        .card-flex .card-body {
+          flex-grow: 1;
+        }
     </style>
   </head>
   <body>
@@ -65,11 +73,11 @@
           <div class="row g-4 ">
           {% for activity in activities %}
             <div class="col-lg-4">
-              <div class="card  bg-light">
-                <img src="{{ activity.image.url }}" class="card-img-top" alt="...">
+              <div class="card  bg-light card-flex">
+                <img src="{{ activity.image.url }}" class="card-img-top  card-image" alt="...">
                 <div class="card-body text-center p-5">
                   <h5 class="card-title">{{ activity.title }}</h5>
-                  <p class="card-text">{{ activity.description|truncatechars:100 }}</p>
+                  <p class="card-text">{{ activity.description|truncatechars:50 }}</p>
                   <a href="{% url 'activity_detail' activity.id %}" class="btn btn-primary">Read more</a>
                 </div>
               </div> 

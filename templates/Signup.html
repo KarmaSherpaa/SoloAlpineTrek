@@ -87,6 +87,12 @@
             display: flex;
             align-items: center;
         }
+        .modal-dialog {
+            max-width: 800px; /* Increase modal width */
+        }
+        .modal-content {
+            padding: 20px; /* Add padding for better appearance */
+        }
     </style>
     <script>
         function togglePasswordVisibility() {
@@ -187,7 +193,7 @@
                         <div class="col-md-12 form-group">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="terms-field" name="terms" value="terms" />
-                                <label for="terms" class="form-check-label">I agree to the terms and conditions</label>
+                                <label for="terms" class="form-check-label">I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">terms and conditions</a></label>
                             </div>
                             <p id="terms-warning" style="display: none;">You must agree to the terms and conditions</p>
                         </div>
@@ -196,7 +202,51 @@
                 </form>
             </div>
         </div>
-    </section>    
+    </section>   
+    <!-- Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h2>Terms and Conditions</h2>
+                    <p>Welcome to Solo Alpine Trek! These terms and conditions outline the rules and regulations for the use of our website and services.</p>
+                    
+                    <h3>1. Acceptance of Terms</h3>
+                    <p>By accessing or using our website and services, you agree to be bound by these terms and conditions and our Privacy Policy. If you do not agree with any part of the terms, you must not use our services.</p>
+
+                    <h3>2. Registration</h3>
+                    <p>To access certain features of our website, you may be required to register for an account. You agree to provide accurate, current, and complete information during the registration process and to update such information as necessary to keep it accurate, current, and complete.</p>
+
+                    <h3>3. Trekking Safety</h3>
+                    <p>Your safety is paramount to us. You agree to comply with all safety guidelines and instructions provided by Solo Alpine Trek. We are not responsible for any injuries or accidents that occur during trekking activities.</p>
+                    
+                    <h3>5. Passport and Citizenship Requirements</h3>
+                    <p>All participants must provide valid passport and citizenship details if required. These documents will be handled physically a few days before the booking day. Failure to provide the required documents may result in the cancellation of your booking with a partial refund.</p>
+    
+                    <h3>4. Cancellation and Refunds</h3>
+                    <p>Cancellations made 30 days or more before the trek start date will receive a full refund. Cancellations made within 30 days of the trek start date will not be eligible for a refund.</p>
+
+                    <h3>5. Limitation of Liability</h3>
+                    <p>In no event shall Solo Alpine Trek be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with the use of our services.</p>
+
+                    <h3>6. Changes to Terms</h3>
+                    <p>We reserve the right to modify these terms and conditions at any time. Changes will be posted on this page, and your continued use of the website and services signifies your acceptance of the updated terms.</p>
+
+                    <h3>7. Governing Law</h3>
+                    <p>These terms and conditions are governed by and construed in accordance with the laws of the country in which Solo Alpine Trek operates.</p>
+
+                    <p>Thank you for choosing Solo Alpine Trek. We look forward to providing you with an unforgettable trekking experience.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div> 
     <footer>
       {% include 'footer.html' %}
     </footer>

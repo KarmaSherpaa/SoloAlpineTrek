@@ -73,6 +73,7 @@
             background-color: #f8d7da;
             color: #721c24;
         }
+        
       
 
     </style>
@@ -96,22 +97,56 @@
     <!--End Hero section-->
   </section>
   <!--End Hero section-->
-      
-  <section class="bg-light p-5">
-    <div class="container py-5">
-        <h2 class="text-center text-dark mb-4">{{ package.name }}</h2>
-        <p class="lead text-center text-muted mb-5">{{ package.description }}</p>
-        <div class="row mb-4">
+      <br>
+  <section class="bg-light mb-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="text-dark mb-4">{{ package.name }}</h2>
+            <div>
+              <h2 class="text-dark mb-4"> Discriptions</h2>
+              <p class="lead text-muted fs-5 mb-4">{{ package.description }}</p>
+            </div>
+            <div>
+              <h2 class="text-dark mb-4"> Requirements</h2>
+              <p class="lead text-muted fs-5 mb-4">{{ package.requirements }}</p>
+            </div>
+            <div>
+              <h2 class="text-dark mb-4"> Services</h2>
+              <p class="lead text-muted">{{ package.services }}</p>
+            </div>
+            {% if package.map_image %}
+            <div class="mb-4">
+                <img class="img-fluid rounded mx-auto d-block w-100" src="{{ package.map_image.url }}" alt="Map image">
+            </div>
+            {% endif %}
+            <div>
+              <h2 class="text-dark mb-4"> Trip detial</h2>
+              {% for day_description in package.day_descriptions.all %}
+                  <div class="day-description mb-3">
+                      <h3 class="h5">Day {{ day_description.day }}</h3>
+                      <p>{{ day_description.description }}</p>
+                  </div>
+              {% endfor %}
+            </div>  
+        </div>
+        <div class="row text-center mb-4">
             <div class="col-md-4">
-                <p class="card-text"><strong>Duration:</strong> {{ package.duration }}</p>
+                <p class="card-text"><strong>Duration:</strong> {{ package.total_days }}</p>
             </div>
             <div class="col-md-4">
                 <p class="card-text"><strong>Difficulty Level:</strong> {{ package.difficulty_level }}</p>
             </div>
             <div class="col-md-4">
+                <p class="card-text"><strong>Best Season:</strong> {{ package.best_season }}</p>
+            </div>
+            <div class="col-md-4">
+                <p class="card-text"><strong>Total participants:</strong> {{ package.total_participants }}</p>
+            </div>
+            <div class="col-md-4">
                 <p class="card-text"><strong>Price:</strong> Rs{{ package.price }}</p>
             </div>
-      </div>
+        </div>
+      <div class="card p-4 mb-4">
         {% if package.booking_available %}
           <form id="bookingForm" method="post" action="{% url 'book_activity' package.id %}" class="mb-4">
               {% csrf_token %}
@@ -141,6 +176,7 @@
           <p class="card-text text-danger">Booking Not Available</p>
         {% endif %}
     </div>
+  </div>
   </section>
       <h2 class="text-center text-black">Popular Packages</h2>
       <br>

@@ -50,6 +50,14 @@
         .hero-sections h1 {
             font-size: 1.5em;
         }
+        .card-image {
+          width: 100%;  /* This will make the image take up the full width of the card */
+          height: 200px;  /* This will set the height of the image */
+          object-fit: cover;  /* This will scale the image to cover the area of the image box, cropping it if necessary */
+       }
+        .card-flex .card-body {
+          flex-grow: 1;
+       }
 
     </style>
   </head>
@@ -80,12 +88,12 @@
       <div class="container ">
           <div class="row g-4 ">
             {% for package in packages %}
-            <div class="col-lg-4">
-              <div class="card  bg-light">
-                <img src="{{ package.image.url }}" class="card-img-top" alt="...">
+            <div class="col-lg-4 ">
+              <div class="card  bg-light  card-flex ">
+                <img src="{{ package.image.url }}" class="card-img-top card-image" alt="...">
                 <div class="card-body text-center p-5">
                   <h5 class="card-title">{{ package.name }}</h5>
-                  <p class="card-text">{{ package.description|truncatechars:100 }}</p>
+                  <p class="card-text">{{ package.description|truncatechars:50}}</p>
                   <a href="{% url 'package_detail' package.id %}" class="btn btn-primary">Read more</a>
                 </div>
               </div> 
