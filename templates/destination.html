@@ -27,6 +27,13 @@
         .card-flex .card-body {
           flex-grow: 1;
         }
+        .section-title {
+          color: #A52A2A; /* Matching the color from the example */
+       }
+        .custom-section {
+          background-color: #f8f9fa; /* Light grey background */
+          padding: 0px;
+  } 
     </style>
   </head>
   <body>
@@ -43,12 +50,18 @@
       </div>
     </section>
     <!--End Hero section-->
-    <section class=" bg-white p-5">
+    <section class="custom-section">
       <div class="container py-5">
-          <h2 class="text-center text-dark ">{{destination.name}}</h2>
-          <p class="lead text-center text-dark mb-5">{{destination.description}}</p>
+          <h2 class="text-center text-dark section-title">{{destination.name}}</h2>
+          <br>
+          <p class="lead text-muted fs-5 mb-4">{{destination.description}}</p>
       </div>
     </section>
+    {% if destination.country_map %}
+        <div class="mb-4">
+            <img class="img-fluid rounded mx-auto d-block" src="{{ destination.country_map.url }}" alt="Map image" style="max-height: 1000px; width: 50%;">
+        </div>
+      {% endif %}
     <section class=" primary-subtle p-5">
       <h2 class="text-center text-black">Activity</h2>
       <br>

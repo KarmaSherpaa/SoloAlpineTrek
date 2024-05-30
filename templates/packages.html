@@ -75,7 +75,14 @@
             background-color: #f8f9fa; /* Light grey background */
             padding: 0px;
       } 
-      
+      .card-image {
+        width: 100%;  /* This will make the image take up the full width of the card */
+        height: 200px;  /* This will set the height of the image */
+        object-fit: cover;  /* This will scale the image to cover the area of the image box, cropping it if necessary */
+      }
+      .card-flex .card-body {
+        flex-grow: 1;
+      }
 
     </style>
   </head>
@@ -119,11 +126,15 @@
             <p class="lead text-muted">{{ package.services }}</p>
           </div>
           <div>
+            <h2 class="section-title"> Safety tips</h2>
+            <p class="lead text-muted">{{ package.safety_tips}}</p>
+          </div>
+          <div>
             <h2 class="section-title"> Trip detial</h2>
             {% for day_description in package.day_descriptions.all %}
                 <div class="day-description mb-3">
-                  <h3 class="section-title">Day {{ day_description.day }}</h3>
-                  <p>{{ day_description.description }}</p>
+                  <h3>Day {{ day_description.day }}</h3>
+                  <p class="lead text-muted">{{ day_description.description }}</p>
                 </div>
             {% endfor %}
           </div>  
@@ -146,7 +157,7 @@
             <div class="icon-text">
               <i class="fas fa-mountain"></i>
               <div>
-                <h5 style="margin-left: 20px;">Difficulty Level</h5>
+                <h5 style="margin-left: 20px;">Best Season</h5>
                 <p style="margin-left: 20px;">{{ package.best_season }}</p>
               </div>
             </div>
@@ -154,14 +165,14 @@
               <i class="fas fa-users"></i>
               <div>
                 <h5 style="margin-left: 20px;">Total participants</h5>
-                <p style="margin-left: 20px;">{{ package.total_participants }}</p>
+                <p style="margin-left: 20px;">People: {{ package.total_participants }}</p>
               </div>
             </div>
             <div class="icon-text">
               <i class="fas fa-dollar-sign" style="margin-left: 10px;"></i>
               <div>
                 <h5 style="margin-left: 30px;">Total price per person</h5>
-                <p style="margin-left: 30px;">Rs{{ package.price }}</p>
+                <p style="margin-left: 30px;">Rs:{{ package.price }}</p>
               </div>
             </div>
           </div>
@@ -169,11 +180,11 @@
     </div>
   
   </section>
-        {% if package.map_image %}
+      {% if package.map_image %}
         <div class="mb-4">
-            <img class="img-fluid rounded mx-auto d-block w-100" src="{{ package.map_image.url }}" alt="Map image">
+            <img class="img-fluid rounded mx-auto d-block" src="{{ package.map_image.url }}" alt="Map image" style="max-height: 1000px; width: 50%;">
         </div>
-        {% endif %}
+      {% endif %}
   <br>
   <section>
       <div class="container">
@@ -209,13 +220,31 @@
         </div>
       </div>
     </section>
-      <h2 class="text-center text-black">Popular Packages</h2>
+    <section class=" primary-subtle p-5">
+      <h2 class="text-center text-black">Popular Trekking Packages</h2>
       <br>
       <br>
-
-      <figure>
-
-      </figure> 
+      <div class="container ">
+          <div class="row g-4 ">
+              {% for package in packages_booked %}
+              <div class="col-lg-4">
+                  <div class="card bg-light card-flex">
+                      <img src="{{ package.image.url }}" class="card-img-top card-image" alt="...">
+                      <div class="card-body text-center p-5">
+                          <h5 class="card-title">{{ package.name }}</h5>
+                          <p class="card-text">{{ package.description|truncatechars:50 }}</p>
+                          <a href="{% url 'package_detail' package.id %}" class="btn btn-primary">Read more</a>
+                      </div>
+                  </div> 
+              </div> 
+              {% empty %}
+              <div class="col-lg-4">
+                  <p>No packages available.</p>
+              </div>
+              {% endfor %}
+          </div>  
+      </div>
+    </section>
     <!--Footer-->
     {% include 'footer.html' %}
     <!--End Footer -->

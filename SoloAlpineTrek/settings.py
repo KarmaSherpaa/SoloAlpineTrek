@@ -156,12 +156,12 @@ EMAIL_HOST_PASSWORD = 'yzjijhjtyepomyny'
 # Define the custom Jazzmin settings
 JAZZMIN_SETTINGS = {
     "site_header": "Solo Alpine Trek",
-    "site_title": "Solo Alpine Trek",
-    
-    "welcome_sign": "Welcome to Solo Alpine Trek",
-    "show_ui_builder": True,
+    "site_brand": "Solo Alpine Trek",
     "hide_models": ["auth.Group", "auth.User", "auth.Permission", "sites.Site", "sessions.Session", "admin.LogEntry"],
     "changeform_format": "carousel",
+    "site_copyright": "Solo Alpine Trek",
+    "site_logo": "img/logo.png",
+
 }
 
 JAZZMIN_UI_TWEAKS = {

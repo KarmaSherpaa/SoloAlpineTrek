@@ -58,9 +58,9 @@ def activity_detail(request, activity_id):
 def package_detail(request, package_id):
     package = get_object_or_404(Package, id=package_id)
     destinations = Destination.objects.all()
-    
     uuid_val = uuid.uuid4()
-    return render(request, 'packages.html', {'package': package, 'destinations': destinations, 'uuid_val': uuid_val, })
+    packages_booked = Package.objects.annotate(num_bookings=Count('booking')).order_by('-num_bookings')[:6]
+    return render(request, 'packages.html', {'package': package, 'destinations': destinations, 'uuid_val': uuid_val, 'packages_booked':packages_booked})
 
 @login_required
 def book_activity(request, package_id):

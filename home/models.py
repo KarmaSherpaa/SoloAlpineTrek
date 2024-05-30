@@ -7,6 +7,7 @@ from django.utils import timezone
 class Destination(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
+    country_map = models.ImageField(upload_to='map_images', blank=True, null=True) 
     def __str__(self):
         return self.name
 
@@ -47,6 +48,7 @@ class Package(models.Model):
     image = models.ImageField(upload_to='package_images', blank=True, null=True)
     map_image = models.ImageField(upload_to='map_images', blank=True, null=True)  # New field for map image
     best_season = models.CharField(max_length=50, default='Spring')
+    safety_tips = models.TextField(default='')  # New field for safety tips with default value ''
 
     def __str__(self):
         return self.name

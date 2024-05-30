@@ -13,20 +13,16 @@
           <h5 class="text-uppercase text-white font-weight-bold mb-4">Services</h5>
           <ul class="list-unstyled">
             <li class="mb-1">
-              <a href="#" class="text-white">Trekking</a>
+              <a href="{% url 'feedback' %}" class="text-white">Feedback</a>
             </li>
             <li class="mb-1">
-              <a href="#" class="text-white">Booking</a>
+              <a class="text-white">Booking</a>
             </li>
             <li class="mb-1">
-              <a href="#" class="text-white">Camping</a>
+              <a href="{% url 'contact_us'%}" class="text-white">Inquiry</a>
             </li>
             <li class="mb-1">
-              <a href="#" class="text-white">Rafting</a>
-            </li>
-            </li>
-            <li class="mb-1">
-              <a href="#" class="text-white">Expeditation</a>
+              <a href="/Signup" class="text-white">User-account</a>
             </li>
           </ul>
         </div>  
@@ -34,16 +30,13 @@
           <h5 class="text-uppercase text-white font-weight-bold mb-4">Page links</h5>
           <ul class="list-unstyled">
             <li class="mb-1">
-              <a href="#" class="text-white">Home</a>
+              <a href="/" class="text-white">Home</a>
             </li>
             <li class="mb-1">
-              <a href="#" class="text-white">About</a>
+              <a href="{% url 'about_us' %}" class="text-white">About</a>
             </li>
             <li class="mb-1">
-              <a href="#" class="text-white">Services</a>
-            </li>
-            <li class="mb-1">
-              <a href="#" class="text-white">Contact us</a>
+              <a href="{% url 'contact_us'%}" class="text-white">Contact us</a>
             </li>
 
           </ul>
