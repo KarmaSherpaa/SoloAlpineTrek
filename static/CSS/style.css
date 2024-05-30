@@ -19,12 +19,26 @@
     background-color: #00b383;
 }
 
-.navbar-toggler:focus,
-.btn-close:focus {
+.navbar-toggler {
+  border: none;
+  font-size: 1.25rem;
+}
+
+.navbar-toggler:focus, .btn-close:focus {
     box-shadow: none;
     outline: none;
 }
-
+.navbar-brand{
+  font-weight: 500;
+  color: #009970;
+  font-size: 24px;
+  transition: 0.3s color;
+}
+.nav-link{
+  font-weight: 600;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
 .nav-link {
     color: #000000;
     position: relative;

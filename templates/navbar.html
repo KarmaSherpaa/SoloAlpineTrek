@@ -4,7 +4,7 @@
       <a class="navbar-brand me-auto" href="/">SoloAlpineTrek</a>
       <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Logo</h5>
+              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">SoloAlpineTrek</h5>
               <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
@@ -35,7 +35,7 @@
           </div>
       </div>
       
-      {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated %}
           <div class="dropdown">
               <img src="{{ request.user.get_profile_image }}" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px;">
               <button class="login-button dropdown-toggle" type="button" id="userDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -46,22 +46,19 @@
                   <li><a class="dropdown-item" href="/Signout">Signout</a></li>
               </ul>
           </div>
-      {% else %}
-          {% if request.path == '/Signin' %}
-              <a href='/Signup' class="login-button">Register</a>
-          {% elif request.path == '/Signup/' %}
-              <a href='/Signin' class="login-button">Login</a>
-          {% else %}
-              <a href='/Signin' class="login-button">Login</a>
-          {% endif %}
-      {% endif %}
+        {% else %}
+            {% if request.path == '/Signin' %}
+                <a href='/Signup' class="login-button">Register</a>
+            {% elif request.path == '/Signup/' %}
+                <a href='/Signin' class="login-button">Login</a>
+            {% else %}
+                <a href='/Signin' class="login-button">Login</a>
+            {% endif %}
+        {% endif %}
   
-      <button class="navbar-toggler pe-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
       </button>
   </div>
 </nav>
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"></script>
-</body>
